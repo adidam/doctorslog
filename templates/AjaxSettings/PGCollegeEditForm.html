@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<script src="{{ STATIC_URL }}js/settings_edit.js"></script>
+<script>
+    $(function(){
+        $("#PGCollege_edit_form").submit(
+                function(){
+                    submitForm($(this),'#form-fields-PGCollege','#post_graduation_college_wrapper','#edit-PGCollege');
+                    return false;
+                }
+        )
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $("#cancel-PGCollege").click(function(){
+            var wrapper = $(this).parents(".child_wrapper");
+            $("#post_graduation_college_wrapper").load("/ajax_settings #post_graduation_college_wrapper/");
+            $("#form-fields-PGCollege").empty();
+            $("#edit-PGCollege").show();
+            wrapper.removeClass("bgColor");
+            return false;
+        });
+    });
+</script>
+
+<form id="PGCollege_edit_form" action="/edit/PG-college/" method="post" >
+    {% csrf_token %}
+    {{ form.post_graduation_medical_institute.help_text }}<br/>
+    {{ form.post_graduation_medical_institute.label_tag }}<br/>
+    {{ form.post_graduation_medical_institute }}<br/>
+    <input id="PGCollege_submit" type="submit" value="Update"/>
+    <input type="submit" value="Cancel" id="cancel-PGCollege"/>
+    <img style="display: none;" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
+</form>

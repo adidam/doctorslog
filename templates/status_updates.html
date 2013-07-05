@@ -1,0 +1,100 @@
+<script src={{ STATIC_URL }}js/edit_status.js></script>
+
+<script>
+    $(function(){
+        $("a.show_list").tipsy({gravity:'s'});
+    });
+</script>
+<div class="post" id="status_post_{{ item.id }}">
+<div class="status_post_container" id="status_post_container_{{ item.id }}">
+  {% if item.posted_by.get_profile.get_profile_picture %}
+      <img class="user_photo" src="{{ item.posted_by.get_profile.get_profile_picture }}" height="75" width="75" alt=""/>
+  {% else %}
+      <img class="user_photo" src="{{ STATIC_URL }}images/default_profile copy.png" height="75" width="75" alt=""/>
+  {% endif %}
+  <div class="status_post_subject">
+    <p><a class="user" href="/{{ item.posted_by.username }}/">Dr {{ item.posted_by.get_full_name|capfirst }}</a>
+      <span class="dated">{{ item.timestamp }}</span></p>
+    <p class="quickPost">{{ item.status_update|urlize }}</p>
+  </div>
+   {% block quick_post_opts %}
+    {% if item.posted_by == user %}
+        <div class="status_post_nav">
+          <a href="/edit-status/{{ item.id }}/" class="edit_status_post" id="status-edit-{{ item.id }}">Edit</a> |
+          <a href="/status-post-delete/{{ item.id }}/" class="delete_post" id="status-delete-{{ item.id }}">Delete</a>
+        </div>
+        {% else %}
+        <a href="/report-status-post/{{ item.id }}/" class="report_post">Hide / Report this post</a>
+    {% endif %}
+   {% endblock %}
+</div>
+    <div class="report_form_container"></div>
+  <div class="comments_container">
+    <div class="comments_body" id="status_comments_body_{{ item.id }}">
+        {% for comment in item.statuscomments_list %}
+            <div class="comment_items" id="status_comment_{{ comment.id }}">
+                <div class="comment_main" id="status_comment_main_{{ comment.id }}">
+                    {% if comment.posted_by.get_profile.get_profile_picture %}
+                        <img class="user_photo" src="{{ comment.posted_by.get_profile.get_profile_picture }}" height="40" width="40"/>
+                    {% else %}
+                        <img class="user_photo" src="{{ STATIC_URL }}images/default_profile.png" height="40" width="40"/>
+                    {% endif %}
+                    <div class="comment_div">
+
+                        <div class="user_container">
+                            <a class="user" href="/{{ comment.posted_by.username }}/">Dr {{ comment.posted_by.get_full_name|capfirst }}</a>
+                            <!--<span class="comment_date">{{ comment.timestamp }}</span>-->
+                            {% if item.posted_by == user or comment.posted_by == user %}
+                                <a href="" class="comment_opt_link" id="comment_opt_link_{{ comment.id }}">
+                                    <img class="com_set_icon" src="{{ STATIC_URL }}images/comment_settings.png"/>
+                                </a>
+
+                                <div class="comment_opt_container">
+                                <ul class="comment_root_menu">
+                                  {% if comment.posted_by != user %}
+                                      <li><a class="hide_comment" href="/status/hide-comment/{{ comment.id }}/">Hide</a></li>
+                                  {% endif %}
+                                  {% if comment.posted_by == user %}
+                                      <li><a class="edit_comment" href="/status/edit-comment/{{ comment.id }}/">Edit</a></li>
+                                  {% endif %}
+                                  {% if item.posted_by == user or comment.posted_by == user %}
+                                      <li><a class="delete_comment" href="/status/delete-comment/{{ comment.id }}/">Delete</a></li>
+                                  {% endif %}
+                                </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <p class="comment_subject" id="status_comment_subject_{{ comment.id }}">{{ comment|urlize }}</p>
+                        <span class="comment_date">{{ comment.timestamp }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="" id="status_num_comments_{{ item.id }}" class="show_list"
+       original-title="{{ item.commented_by|join:','}}" style="float: right;">
+        {% if item.num_comments != 0 %}{{ item.num_comments }} Responses  View Discussion{% endif %}
+    </a>
+    <a href="" class="hide_list" style="float:right;">
+        Hide Discussion
+    </a><br/>
+    {% if item.can_be_commented %}
+        <form class="comment_submit" id="status_comment_form_{{ item.id }}"  method="post" action="/status/comment/{{ item.id }}/">
+            {% csrf_token %}
+            <ul class="commentElements">
+              <li><label for="id_status_comment_{{ item.id }}"></label></li>
+            {% if user.get_profile.get_profile_picture %}
+                <li><img class="commentsUserPic" src="{{ user.get_profile.get_profile_picture }}" width="40" height="40"/></li>
+            {% else %}
+                <li><img class="commentsUserPic" src="{{ STATIC_URL }}images/default_profile.png" width="40" height="40"/></li>
+            {% endif %}
+            <li class="li-comment"><textarea class="comment" id="id_status_comment_{{ item.id }}" placeholder="Your comment/suggestion.."
+                      cols="60" rows="1" name="comment"></textarea>
+                <input style="display: none;" class="input_submit" id="status_input_{{ item.id }}" type="submit" value="post"/></li>
+            <li><img class="loader" src="{{ STATIC_URL }}images/ajax-loader.gif"/></li>
+            </ul>
+        </form>
+    {% endif %}
+  </div>
+</div>

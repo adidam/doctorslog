@@ -1,0 +1,10 @@
+{% extends "settings/settings.html" %}
+{% block last_name %}
+    <form action="" method="post">{% csrf_token %}
+        <p class="new_tag"><label for="id_last_name">Enter new last name:</label>
+            {{ form.last_name }}</p>
+            {{ form.last_name.errors }}
+        <input type="submit" value="Done"/>
+        <a href="/settings/" id="cancel" style="color:#FF5500; ">Cancel</a>
+    </form>
+{% endblock %}

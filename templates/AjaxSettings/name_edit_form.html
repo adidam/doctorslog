@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<script src="{{ STATIC_URL }}js/jquery.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/settings_edit.js"></script>
+<script>
+    $(function(){
+        $("#name_edit_form").submit(
+                function(){
+                    if($("input#id_first_name").val()=='' || $("input#id_last_name").val()==''){
+                        alert("Sorry, please fill in both fields");
+                        return false;
+                    }
+                    submitForm($(this),'#form-fields-name','#name_wrapper','#edit');
+                    return false;
+                }
+        )
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $("#cancel").click("click",function(){
+            var wrapper = $(this).parents(".child_wrapper");
+            $("#edit").show();
+            $("#name_wrapper").load("/ajax_settings #name_wrapper/");
+            $("#form-fields-name").empty();
+            wrapper.removeClass("bgColor");
+            return false;
+        });
+    });
+
+</script>
+
+  <form id="name_edit_form" action="/edit_name/" method="post" >
+      {% csrf_token %}
+      {{ form.first_name.label_tag }}<br/>
+      {{ form.first_name }}<br/>
+      {{ form.last_name.label_tag }}<br/>
+      {{ form.last_name }}<br/>
+      {% if form.first_name.errors %}
+      {{ form.first_name.errors }}<br/>
+      {% endif %}
+      {% if form.last_name.errors %}
+      {{ form.last_name.errors }}<br/>
+      {% endif %}
+      <input id="first_name_submit" type="submit" value="submit" onkeyup="alert('key up')"/>
+      <input type="button" value="Cancel" id="cancel"/>
+      <img src="{{ STATIC_URL }}images/ajax-loader.gif" alt="" style="display: none;"/>
+  </form>

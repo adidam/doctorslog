@@ -1,0 +1,28 @@
+<script src="{{ STATIC_URL }}js/edit_post.js"></script>
+<script src="{{ STATIC_URL }}js/delete_post.js"></script>
+{% for item in user_posts %}
+    {% if item.posted_by.get_profile.get_profile_picture %}
+        <img src="{{ item.posted_by.get_profile.get_profile_picture }}"/>
+    {% else %}
+        <img src="{{ STATIC_URL }}images/default_profile.png"/>
+    {% endif %}
+            <p>Posted by <a href="/{{ item.posted_by.username }}/">Dr.{{ item.posted_by.get_full_name }}</a></p>
+            <p>Marked as: {{ item.mark_as }}</p>
+            <p>
+                Relevance:
+                {% for speciality in item.relevance.all %}
+                    {{ speciality.name }},
+                {% endfor %}
+            </p>
+            <p>{{ item.title }}</p>
+            {% autoescape off %}
+                <div>{{ item.subject }}</div>
+            {% endautoescape %}
+            <p class="dated">
+                {{ item.date_posted }}
+            </p>
+            {% if item.posted_by == user %}
+            <a href="/post-edit/{{ item.id }}/" class="edit_post" id="{{ item.id }}">Edit</a>
+            <a href="/post-delete/{{ item.id }}/" class="delete_post" id="delete-{{ item.id }}">Delete</a>
+            {% endif %}
+{% endfor %}

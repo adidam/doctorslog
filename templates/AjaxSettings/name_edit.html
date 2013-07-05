@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile_settings.css"/>
+<style>
+    .bgColor{
+        background-color: #F5F5F5;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#edit").click("click",function(){
+            $(this).parents(".child_wrapper").addClass("bgColor");
+            $("#edit").hide();
+            $("#form-fields-name").load("/edit_name/");
+            return false;
+        });
+    });
+</script>
+<div id="first_name">
+      <div class="param">Name</div>
+      <div class="value">{{ user.get_full_name|capfirst }}
+      <a class="edit" href="/edit_name/" id="edit">Edit</a></div>
+    <div class="form-fields" id="form-fields-name">
+    </div>
+</div>

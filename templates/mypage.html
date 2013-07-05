@@ -1,0 +1,25 @@
+{% extends "home-content.html" %}
+{% block my_page_extra_head %}
+    <script>
+      $(function(){
+          $("a.member").css('color','#fff');
+      });
+    </script>
+{% endblock %}
+{% block quick_post %}
+    <div class="status_update">
+        <form id="status_update_form" method="post" action="/status-updates/?next=/{{ user.username }}/">{% csrf_token %}
+            <label for="status_text" style="color: #7B7B7B;font-family: sans-serif;font-weight: bold;"></label>
+            <textarea id="status_text" name="status_update" cols="75" rows="1">write something..</textarea>
+            <input id="status_update_input" type="submit" value="post"/>
+        </form>
+    </div>
+{% endblock %}
+{% block post_opts %}
+    <a href="/post-edit/{{ item.id }}/?next=/{{ user.username }}/" class="edit_post" id="edit-{{ item.id }}">Edit</a> |
+    <a href="/post-delete/{{ item.id }}/?next=/{{ user.username }}/" class="delete_post" id="delete-{{ item.id }}">Delete</a> |
+    <a href="/move-to-drafts/{{ item.id }}/?next=/{{ user.username }}/" class="move_to_drafts"> Move to drafts</a>
+{% endblock %}
+{% block quick_posts %}
+    {% include "status_updates_mypage.html" %}
+{% endblock %}

@@ -1,0 +1,55 @@
+div.param {
+    width:200px;
+    float:left;
+    text-align: left;
+    font-family: 'Noto Sans',Helvetica,cursive;
+    font-size: 13px;
+}
+
+div.value {
+    color: #0000CC;
+    margin-left:210px;
+    font-family: 'Noto Sans',Helvetica,cursive;
+    font-size: 13px;
+}
+
+a.edit {
+    float:right;
+    font-family: 'Noto Sans',Helvetica,cursive;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 12px;
+    color: #000000;
+}
+
+a.edit:active {
+    color: #CC0000;
+}
+
+.form-fields {
+    margin-left: 210px;
+}
+
+input[type="submit"] {
+    border: none;
+    background-color: #007FFF;
+    color: #fff;
+    font-weight: bold;
+    padding: 5px 12px;
+}
+
+input[type="submit"]:hover{
+    background-color: #0055FF;
+}
+
+input[type="button"] {
+    border:none;
+    background-color: #e3e3e3;
+    color:#000;
+    font-weight: bold;
+    padding: 5px 12px;
+}
+
+input[type="button"]:hover {
+    color:#ff0000;
+}

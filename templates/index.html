@@ -1,0 +1,91 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type"
+          content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Noto+Sans|Alegreya+SC|Noto+serif|Source+Sans+Pro:400,300,200"
+          xmlns="http://www.w3.org/1999/html">
+    {% block title %}<title></title>{% endblock %}
+    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/index2.css" />
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            $(".menu_link").click(function(){
+                var x = $(this).attr('id');
+                if(x==1){
+                    $("#menu_container").hide();
+                    $(this).attr('id','0');
+                }
+                else{
+                    $("#menu_container").show();
+                    $(this).attr('id','1');
+                }
+            });
+        });
+        $(function(){
+            $(document).mouseup(function(){
+                $("#menu_container").hide();
+                $(".menu_link").attr('id','');
+            });
+        });
+    </script>
+    {% block extra_head %}{% endblock %}
+    {% block profile_page_head %}{% endblock %}
+</head>
+<body>
+<div id="header_container">
+    <div id="header">
+        <img src="{{ STATIC_URL }}images/logo_50.png" alt=""/>
+        <div id="top_nav_container">
+            <div id="top_nav_div">
+            <ul id="top_nav">
+                <li><a class="home" href="/home/">Home</a></li>
+                <li><a class="member" href="/{{ user.username }}/">Dr {{ user.first_name|capfirst }}</a></li>
+                <li style="margin-right: 5px;"><a class="menu_link">
+                    <img src="{{ STATIC_URL }}images/settings.png" alt="">
+                </a></li>
+            </ul>
+            </div>
+            <div id="menu_container">
+                <ul id="menu">
+                    <li><a href="/ajax_settings/">Account</a></li>
+                    <li><a href="/privacy_settings/">Privacy</a></li>
+                    <li><a href="/logout/">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+  <div id="wrapper">
+          <div id="lt_column">
+          {% block left_column %}
+              <div id="profile_picture">
+                  {% if user.get_profile.get_profile_picture%}
+                      <img src="{{ user.get_profile.get_profile_picture }}" alt=""/>
+                  {% else %}
+                      <img src="{{ STATIC_URL }}images/default_profile copy.png" width="150" height="150" alt=""/>
+                  {% endif %}
+              </div>
+              <ul id="left_nav">
+                  <li><a id="new_post" href="/new_post/">New post</a></li>
+                  <li><a href="/drafts-list/">Drafts</a></li>
+                  <li><a href="">Subscriptions</a></li>
+                  <li><a id="inviteDoctors" href="/invite/">Invite</a></li>
+                  <li><a id="allFriends" href="/friends/">Friends</a></li>
+                  <li><a href="/specialities/" id="specialities">Specialities</a></li>
+                  <li><a href="/image-gallery/">Gallery</a></li>
+              </ul>
+          {% endblock %}
+          </div>
+          <div id="content">
+              {% block profile_content %}{% endblock %}
+              {% block content %}
+
+              {% endblock %}
+          </div>
+
+  </div>
+</body>
+</html>

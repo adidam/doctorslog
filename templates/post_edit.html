@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+{% block extra_head %}
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script>
+        $(function(){
+            alert("This post will be  saved as draft");
+        });
+    </script>
+    <style>
+      #edit-post ul li {
+          list-style-type: none;
+          display: inline;
+      }
+    </style>
+{% endblock %}
+{% block content %}
+    <div id="edit-post">
+            {{ form.title.label_tag }}<br/>
+            {{ form.title }}<br/>
+            {{ form.subject.label_tag }}<br/>
+            {{ form.subject }}<br/>
+            {{ form.share_with.label_tag }}<br/>
+            {{ form.share_with }}<br/>
+            {{ form.selected_friends.label_tag }}<br/>
+            {{ form.selected_friends }}<br/>
+            {{ form.mark_as.label_tag }}<br/>
+            {{ form.mark_as }}<br/>
+            {{ form.relevance.label_tag }}<br/>
+            {{ form.relevance.help_text }}<br/>
+            {{ form.relevance }}<br/>
+            {{ form.errors }}
+            <input type="submit" value="post"/>
+    <a href="/home/">cancel</a>
+    </div>
+{% endblock %}

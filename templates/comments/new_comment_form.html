@@ -1,0 +1,10 @@
+
+<script src="{{ STATIC_URL }}js/jquery.form.js"></script>
+<script type="text/javascript">
+</script>
+
+<form id="form_{{ post.id }}"  method="post" action="/comment/{{ post.id }}/">{% csrf_token %}
+    {{ form.comment.label_tag }}<br/>
+    {{ form.comment }}<br/>
+    <input id="input_{{ post.id }}" type="submit" value="submit"/>
+</form>

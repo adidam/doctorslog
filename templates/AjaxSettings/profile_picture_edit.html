@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile_settings.css"/>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#edit-pp").click("click",function(){
+            $("#edit-pp").hide();
+            $.getJSON(
+                    '/edit_profile_picture/',
+                    function(data){
+                        $("#form-fields-pp").html(data.html)
+                    }
+            );
+            return false;
+        });
+    });
+</script>
+<div id="set_profile_picture">
+        <div class="param">Edit Profile Picture</div>
+        {% if profile_picture %}
+            <div class="value">last updated on {{ profile_picture.pp_update_date|date:"d M Y P" }}
+                <a class="edit" href="/edit_profile_picture/" id="edit-pp">Edit</a></div>
+        {% else %}
+            <div class="value"><span style="color: red;">Not yet updated</span>
+            <a class="edit" href="/edit_profile_picture/" id="edit-pp">Edit</a></div>
+        {% endif %}
+    <div class="form-fields" id="form-fields-pp">
+    </div>
+</div>

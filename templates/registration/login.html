@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Noto+Sans|Alegreya+SC"
+          xmlns="http://www.w3.org/1999/html">
+    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/login.css"/>
+    <link rel="stylesheet/less" href="{{ STATIC_URL }}less/bootstrap.less" media="all"/>
+    {% block extra_style %}{% endblock %}
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/js/less.js"></script>
+    <script>
+        $(function(){
+            $("#knowMore").click(function(){
+                $("#aboutClip").hide();
+                $("#aboutMore").show();
+                $(this).hide();
+            });
+        });
+
+        $(function(){
+            $("#showLessImg").click(function(){
+                $("#aboutClip").show();
+                $("#aboutMore").hide();
+                $("#knowMore").show();
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="header">
+    <img src="{{ STATIC_URL }}images/logo_50.png" alt="">
+</div>
+<div id="wrapper">
+  <p style="font-family: 'Noto Sans',verdana,fantasy;font-size: 20px;margin: 0;">Welcome Doctors!</p>
+  <div id="about">
+    {% block variable_content %}
+    <p id="about_heading"><span id="doctorslog">doctorslog</span>
+        is designed exclusively for doctors in medical practice and research.
+        <span id="knowMore">Read more</span></p>
+       <div id="aboutClip" style="background-image: url('{{ STATIC_URL }}images/final_clipart_r1.png');
+               background-repeat: no-repeat;width: 500px;height: 390px;margin: 0;padding: 0;">
+       </div>
+       <div id="aboutMore">
+        <div class="line_container">
+            <img class="icon_area" src="" alt=""/>
+            document your professional work for latter reference
+        </div>
+        <div class="line_container">
+            <img class="icon_area" src="" alt=""/>
+            stay connected with your colleagues in an environment of constructive academic discussions
+        </div>
+        <div class="line_container">
+            <img class="icon_area" src="" alt=""/>share your updated knowledge and interesting
+            clinical experiences with your fellow doctors
+            <img id="showLessImg" src="{{ STATIC_URL }}images/arw.png" style="float:right;cursor:pointer;margin: 40px 5px 0 0; "/>
+        </div>
+       </div>
+    {% endblock %}
+      <p style="font-size:20px;font-family: Verdana,cursive;float: left;">
+          This website is under construction<br/>
+          Stay tuned ...
+      </p>
+  </div>
+  <div id="sign_in_container">
+      <a id="sign_up_help" href="">
+          Want to Sign up?</a>
+  <div id="sign_in">
+     {% block sign_in %}
+     <div id="login_form">
+       <p class="login">Doctor Sign in</p>
+       <form id="sign_in_form" method="post" action="/login/">
+       {% csrf_token %}
+       <p><label for="id_username">Username</label><br/>
+           <input id="id_username" type="text" maxlength="30" name="username" size="35" style="height:25px;border:1px solid #B3C3FF"></p>
+       <p><label for="id_password">Password</label><br/>
+           <input id="id_password" type="password" name="password" size="35" style="height:25px;border:1px solid #B3C3FF"></p>
+       {% if form.errors %}
+          <p id="error">Invalid username or password</p>
+       {% endif %}
+       <input class="btn btn-primary" type="submit" value="Sign in" />
+       <input type="hidden" name="next" value="{% firstof next '/home/' %}"/>
+       </form>
+     </div>
+     {% endblock %}
+  </div>
+  </div>
+</div>
+</body>
+</html>

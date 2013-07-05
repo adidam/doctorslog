@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('p').addClass('test');
+        });
+        $(document).ready(function(){
+            $('#click_me').bind('click',function(){
+                $('#insert_here').load("/ajax_test/ #insert_here");
+                return false;
+            });
+        });
+    </script>
+    <style>
+        .test{
+            color: #557FFF;
+        }
+    </style>
+</head>
+<body>
+   <p>This is a test</p>
+   <p id="insert_here">{{ message }}</p>
+   <a id="click_me" href="/ajax_test/" >Click here</a>
+</body>
+</html>

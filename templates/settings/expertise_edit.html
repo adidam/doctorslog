@@ -1,0 +1,10 @@
+{% extends "settings/settings.html"%}
+{% block expertise %}
+    <form action="" method="post">{% csrf_token %}
+        <p class="new_tag"><label for="id_expertise">Update:</label>
+            {{ form.expertise }}</p>
+        {{ form.expertise.errors }}
+        <input type="submit" value="Done"/>
+        <a href="/settings/" id="cancel" style="color:#FF5500; ">Cancel</a>
+    </form>
+{% endblock %}

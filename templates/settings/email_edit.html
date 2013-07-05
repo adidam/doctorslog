@@ -1,0 +1,10 @@
+{% extends "settings/settings.html" %}
+{% block email %}
+    <form action="" method="post">{% csrf_token %}
+        <p class="new_tag"><label for="id_email">Enter new email:</label>
+            {{ form.email }}</p>
+        {{ form.email.errors }}
+        <input type="submit" value="Done"/>
+        <a href="/settings/" id="cancel" style="color:#FF5500; ">Cancel</a>
+    </form>
+{% endblock %}

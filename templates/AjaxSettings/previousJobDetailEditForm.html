@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<script src="{{ STATIC_URL }}js/settings_edit.js"></script>
+<script>
+    $(function(){
+        $("#previousJob_edit_form").submit(
+                function(){
+                    submitForm($(this),'#form-fields-previousJob','#previousJob_wrapper','#edit-previousJob');
+                    return false;
+                }
+        )
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $("#cancel-previousJob").click(function(){
+            $("#previousJob_wrapper").load("/ajax_settings #previousJob_wrapper/");
+            $("#form-fields-previousJob").empty();
+            $("#edit-previousJob").show();
+            return false;
+        });
+    });
+</script>
+
+<form id="previousJob_edit_form" action="/edit/previous-job/" method="post" >
+    {% csrf_token %}
+    {{ form.previous_job.help_text }}<br/>
+    {{ form.previous_job.label_tag }}<br/>
+    {{ form.previous_job }}<br/>
+    <input id="previousJob_submit" type="submit" value="submit"/>
+    <input type="submit" value="Cancel" id="cancel-previousJob"/>
+    <img style="display: none;" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
+</form>

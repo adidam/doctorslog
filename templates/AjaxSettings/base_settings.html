@@ -1,0 +1,146 @@
+{% extends "index.html" %}
+    {% block extra_head %}
+    <style>
+        .bgColor {
+            background-color: #F5F5F5;
+        }
+        body {
+            overflow-y: scroll;
+        }
+        #lt_column {
+            width:200px;
+            margin-top: 10px;
+        }
+
+        #content{
+            margin:0 0 0 230px;
+        }
+
+        .child_wrapper {
+            padding: 10px;
+            /*margin-bottom: 1px;*/
+            background-color: #fff;
+            border-bottom: 1px solid #F5F5F5;
+        }
+
+        .child_wrapper:hover {
+            background-color: #F5F5F5;
+        }
+
+         li {
+             list-style-type: none;
+             display: inline;
+             color: #2D2D2D;
+             font-family: sans-serif;
+         }
+
+        ul.left_nav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        ul.left_nav a {
+            display:block;
+            font-family: 'Alegreya SC',Verdana,cursive;
+            color:#000000;
+            padding:10px 0 10px 20px;
+            text-decoration:none;
+            margin-top:5px;
+        }
+
+        form {
+            font-family: 'Noto Sans',Helvetica,serif;
+            font-size: 13px;
+            color:#000000;
+        }
+    </style>
+{% endblock %}
+  {% block left_column %}
+          <ul class="left_nav">
+              <li><a href="">Account settings <span style="float: right;"><img src="{{ STATIC_URL }}images/pointer.png" alt=""/>
+              </span></a></li>
+              <li><a href="/privacy_settings/">Privacy settings</a></li>
+          </ul>
+  {% endblock %}
+  {% block content %}
+    {% block settings_content %}
+    <div id="settings_content">
+    <div class="child_wrapper">
+       <div id="name_wrapper">
+        {% include "AjaxSettings/name_edit.html" %}
+       </div>
+    </div>
+    <div class="child_wrapper">
+       <div id="username_wrapper">
+           {% include "AjaxSettings/username_edit.html" %}
+       </div>
+    </div>
+    <div class="child_wrapper">
+        <div id="email_wrapper">
+           {% include "AjaxSettings/email_edit.html" %}
+        </div>
+    </div>
+    <div class="child_wrapper">
+        <div id="password_wrapper">
+            {% include "AjaxSettings/password_edit.html" %}
+        </div>
+    </div>
+    <div class="child_wrapper">
+        <div id="profile_picture_wrapper">
+            {% include "AjaxSettings/profile_picture_edit.html" %}
+        </div>
+    </div>
+        <div class="child_wrapper">
+            <div id="qualification_wrapper">
+                {% include "AjaxSettings/qualificationEdit.html" %}
+            </div>
+        </div>
+    <div class="child_wrapper">
+        <div id="medSchool_wrapper">
+            {% include "AjaxSettings/medicalSchoolEdit.html" %}
+        </div>
+    </div>
+    <div class="child_wrapper">
+        <div id="speciality_wrapper">
+            {% include "AjaxSettings/specialityEdit.html" %}
+        </div>
+    </div>
+    <div class="child_wrapper">
+        <div id="graduation_year_wrapper">
+            {% include "AjaxSettings/graduationYearEdit.html" %}
+        </div>
+    </div>
+    <div class="child_wrapper">
+        <div id="post_graduation_college_wrapper">
+            {% include "AjaxSettings/PGCollegeEdit.html" %}
+        </div>
+    </div>
+    <div class="child_wrapper">
+        <div id="post_graduation_first_year_wrapper">
+            {% include "AjaxSettings/PGYearEdit.html" %}
+        </div>
+    </div>
+    <div class="child_wrapper">
+        <div id="previousJob_wrapper">
+            {% include "AjaxSettings/previousJobDetailEdit.html" %}
+        </div>
+    </div>
+    <div class="child_wrapper">
+        <div id="presentJob_wrapper">
+            {% include "AjaxSettings/presentJobDetailEdit.html" %}
+        </div>
+    </div>
+    <div class="child_wrapper">
+        <div id="expertise_wrapper">
+            {% include "AjaxSettings/expertiseDetailEdit.html" %}
+        </div>
+    </div>
+    <div class="child_wrapper">
+        <div id="otherDetails_wrapper">
+            {% include "AjaxSettings/otherDetailsEdit.html" %}
+        </div>
+    </div>
+    </div>
+      {% endblock %}
+{% endblock %}

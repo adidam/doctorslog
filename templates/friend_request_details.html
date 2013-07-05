@@ -1,0 +1,78 @@
+
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("a.request-response").click(function(){
+                var a_id = '#'+$(this).attr("id");
+                var p_id = '#'+$(this).parent().attr("id");
+                var url = $(a_id).attr("href");
+                $.getJSON(
+                        url,
+                        function(data){
+                            $(p_id).html(data.data).css(
+                                    {'color':'#009900','padding':'5px 5px 5px 45px',
+                                        'border':'1px solid #DCDCDC',
+                                        'background-color':'#F5F5F5',
+                                    'font-family':'sans-serif','font-weight':'bold'}
+                            )
+                        }
+                );return false;
+            });
+        });
+
+        $(document).ready(function(){
+            $("a.request-ignore").click(function(){
+                var i_id = '#'+$(this).attr("id");
+                var url = $(i_id).attr("href");
+                $.getJSON(
+                        url,
+                        function(data){
+                            $("#content").html(data.html)
+                        }
+                );return false;
+            });
+        });
+    </script>
+    <h4>Friend Requests</h4>
+   {% if new_requests %}
+   <p>New:</p>
+       <div id="req_details_{{ member.username }}" style="float:left">
+       {% for member in new_requests %}
+       <ul style="list-style-type: none; display: block; ">
+           <li><a href="/{{ member.username }}/">Dr {{ member.get_full_name }}</a></li>
+           {% if member.get_profile.get_profile_picture %}
+           <li><img src="{{ member.get_profile.get_profile_picture }}" /></li>
+           {% else %}
+           <li><img src="{{ STATIC_URL }}images/default_profile.png"/></li>
+           {% endif %}
+           <p class="response" id="p_{{ member.username }}">
+               <a id="a_{{ member.username }}" class="request-response" href="/request-accept/{{ member.username }}/">
+                   Accept now
+               </a> |
+               <a id="i_{{ member.username }}" class="request-ignore" href="/request-ignore/{{ member.username }}/">
+                   Later
+               </a>
+           </p>
+       </ul>
+
+       {% endfor %}
+   {% endif %}
+       {% if ignored_requests %}
+           <h4>Pending:</h4>
+           {% for member in ignored_requests %}
+           <ul style="list-style-type: none; display: block; ">
+               <li><a href="/{{ member.username }}/">Dr {{ member.get_full_name }}</a></li>
+               {% if member.get_profile.get_profile_picture %}
+                   <li><img src="{{ member.get_profile.get_profile_picture }}" /></li>
+               {% else %}
+                   <li><img src="{{ STATIC_URL }}images/default_profile.png"/></li>
+               {% endif %}
+               <p class="response" id="p_{{ member.username }}">
+                   <a id="a_{{ member.username }}" class="request-response" href="/request-accept/{{ member.username }}/">
+                       Accept now
+                   </a>
+               </p>
+           </ul>
+           {% endfor %}
+       {% endif %}
+    </div>

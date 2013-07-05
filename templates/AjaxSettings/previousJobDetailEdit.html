@@ -1,0 +1,27 @@
+
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile_settings.css"/>
+<script type="text/javascript">
+    $(function(){
+        $("#edit-previousJob").click(function(){
+            $.get(
+                    $(this).attr('href'),
+                    function(data){
+                        $("#form-fields-previousJob").html(data)
+                    }
+            );
+            return false;
+        });
+    });
+</script>
+<div id="previousJob">
+    <div class="param">Previous Job</div>
+    <div class="value">
+        {% if user.get_profile.previous_job %}
+            {{ user.get_profile.previous_job }}
+        {% else %}
+            <span style="color:red;">Not yet updated</span>
+        {% endif %}
+        <a class="edit" href="/edit/previous-job/" id="edit-previousJob">Edit</a></div>
+    <div class="form-fields" id="form-fields-previousJob">
+    </div>
+</div>

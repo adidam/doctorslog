@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html PUBLIC “-//W3C//DTD XHTML 1.1//EN”
+        “http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd”>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/index_trial.css"/>
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#search").load("/user_search/");
+            return false;
+        });
+        $(document).ready(function(){
+            $.getJSON(
+                    '/request-alerts/',
+                    function(data){
+                        if(data.data!=0)
+                            $("#requests").html('('+data.data+')')
+                    }
+            );return false;
+        });
+
+        $(function(){
+            $(".menu_link").click(function(){
+                var x = $(this).attr('id');
+                if(x==1){
+                    $(".menu_container").hide();
+                    $(this).attr('id','0');
+                }
+                else{
+                    $(".menu_container").show();
+                    $(this).attr('id','1');
+                }
+            });
+        });
+        $(function(){
+            $(document).mouseup(function(){
+                $(".menu_container").hide();
+                $(".menu_link").attr('id','');
+            });
+        });
+    </script>
+    {% block extra_head %}
+    {% endblock %}
+</head>
+<body>
+
+    <div id="header">
+        <div id="logo_container">
+            <img id="logo" src="{{ STATIC_URL }}images/NEW TRIALS/gradient2.jpg" style="z-index: -1;"/>
+        </div>
+        <ul id="top_nav">
+            <li><a id="home" href="/home/">Home</a></li>
+            <li><a id="member" href="/{{ user }}/">Dr {{ user.first_name|capfirst }}</a></li>
+            <li><a class="menu_link" style="border: none"><img id="menu_icon" src="{{ STATIC_URL }}images/settings/tr4.png"/></a></li>
+        </ul>
+    </div>
+    <div id="search"></div>
+  <div id="wrapper">
+    <div id="notifications"></div>
+    <div class="container">
+        <div id="lt_col">
+            {% block profile_picture %}
+                {% if user.get_profile.get_profile_picture %}
+                    <a href=""><img src="{{ user.get_profile.get_profile_picture }} "/></a>
+                {% else %}
+                    <a href=""><img src="{{ STATIC_URL }}images/default_profile copy.png" height="150" width="150"/></a>
+                {% endif %}
+            {% endblock %}
+            {% block left_nav %}
+                <ul class="left_nav">
+                    <li><a id="new_post" href="/new_post/">New post</a></li>
+                    <li><a href="/drafts-list/">Drafts</a></li>
+                    <li><a class="request-details" href="/request-details/">Requests <span id="requests"></span></a></li>
+                    <li><a href="">Subscriptions</a></li>
+                    <li><a href="">Invite</a></li>
+                    <li><a href="/friends/">Friends</a></li>
+                    <li><a href="/specialities/" id="specialities">Specialities</a></li>
+                    <li><a href="/image-gallery/">My Photos</a></li>
+                </ul>
+            {% endblock %}
+        </div>
+        <div id="content">
+            {% block content %}
+                <p>{{ name }}</p>
+                <p>Home page</p>
+                <p>All user and friends' activity is listed here</p>
+            {% endblock %}
+        </div>
+    </div>
+    <div id="footer">
+    </div>
+</div>
+</body>
+</html>
+

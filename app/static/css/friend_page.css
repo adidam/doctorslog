@@ -1,0 +1,10 @@
+.friend_container {
+    width: 500px;
+    margin-left: 20px;
+}
+
+.friend_info {
+    color: #545479;
+    font-family: sans-serif;
+    font-weight: bold;
+}

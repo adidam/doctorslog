@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.9.2.custom.js"></script>
+    {{ form.media.css }}
+    {{ form.media.js }}
+    <script type="text/javascript">
+        $(function(){
+            $("span.ui-helper-hidden-accessible").hide();
+        });
+        $(function(){
+            $('#id_name').removeClass('ui-corner-all');
+            $('#id_name').css('bottom','10px');
+        });
+    </script>
+    <style>
+       #ui-id-1 {
+           border-radius: 5px;
+            max-width:330px;
+           margin: 0;
+           padding: 0;
+            border: 1px solid #e3e3e3;
+           box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        .ui-menu-item{
+            margin: 0;
+            padding: 5px 0;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .ui-corner-all {
+            font-family: 'Arial',Helvetica,serif;
+            font-size: 14px;
+            margin: 2px 0 0;
+            color:#333333;
+            display: block;
+            padding: 3px 20px;
+        }
+        .ui-corner-all:hover {
+            background-color: #0081C2;
+            color:#fff;
+        }
+
+
+    </style>
+    <script>
+        $(function(){
+            $('input#id_name').attr('size',50).css({'border':'1px solid #e3e3e3','height':'30px','max-height':'30px'});
+            $('label[for="id_name"]').text('Find doctors').css(
+                    {'font-family':'Helvetica,sans','font-size':'12px','color':'#333333','margin-right':'5px'}
+            );
+        });
+    </script>
+</head>
+<body>
+   <form id="search_form" action="/search_results/" method="get">
+       {{ form }}
+       <input type='submit' value='Go'/>
+   </form>
+</body>
+</html>

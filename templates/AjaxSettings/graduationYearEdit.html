@@ -1,0 +1,18 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile_settings.css"/>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#edit-graduationYear").click("click",function(){
+            $("#edit-graduationYear").hide();
+            $("#form-fields-graduationYear").load("/edit-graduation-year/");
+            return false;
+        });
+    });
+</script>
+<div id="graduationYear">
+    <div class="param">First year of graduation</div>
+    <div class="value">{{ user.get_profile.graduation_first_year }}
+        <a class="edit" href="/edit-graduation-year/" id="edit-graduationYear">Edit</a></div>
+    <div class="form-fields" id="form-fields-graduationYear"></div>
+</div>

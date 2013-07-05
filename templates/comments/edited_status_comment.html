@@ -1,0 +1,39 @@
+<script type="text/javascript" src="{{ STATIC_URL }}js/edit_comment.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/delete_comment.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/comments_ui.js"></script>
+
+<div class="comment_main" id="status_comment_main_{{ comment.id }}">
+    {% if comment.posted_by.get_profile.get_profile_picture %}
+        <img class="user_photo" src="{{ comment.posted_by.get_profile.get_profile_picture }}" height="40" width="40"/>
+    {% else %}
+        <img class="user_photo" src="{{ STATIC_URL }}images/default_profile.png" height="40" width="40"/>
+    {% endif %}
+    <div class="comment_div">
+
+        <div class="user_container">
+            <a class="user" href="/{{ comment.posted_by.username }}/">Dr {{ comment.posted_by.get_full_name }}</a>
+            <span class="comment_date">{{ comment.timestamp }}</span>
+            {% if item.posted_by == user or comment.posted_by == user %}
+                <a href="" class="comment_opt_link" id="comment_opt_link_{{ comment.id }}">
+                    <img class="com_set_icon" src="{{ STATIC_URL }}images/comment_settings.png"/>
+                </a>
+
+                <div class="comment_opt_container">
+                    <ul class="comment_root_menu">
+                        {% if comment.posted_by != user %}
+                            <li><a class="hide_comment" href="/status/hide-comment/{{ comment.id }}/">Hide</a></li>
+                        {% endif %}
+                        {% if comment.posted_by == user %}
+                            <li><a class="edit_comment" href="/status/edit-comment/{{ comment.id }}/">Edit</a></li>
+                        {% endif %}
+                        {% if item.posted_by == user or comment.posted_by == user %}
+                            <li><a class="delete_comment" href="/status/delete-comment/{{ comment.id }}/">Delete</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+
+        <p class="comment_subject" id="status_comment_subject_{{ comment.id }}">{{ comment|urlize }}</p>
+    </div>
+</div>

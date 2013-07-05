@@ -1,0 +1,152 @@
+{% extends "home-content.html" %}
+{% block title %}<title>doctorslog/Dr {{ person.first_name|capfirst }} {{ person.last_name|capfirst }}</title>{% endblock %}
+{% block profile_page_head %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile.css"/>
+    <script src="{{ STATIC_URL }}js/subscriptions.js"></script>
+    <script src="{{ STATIC_URL }}js/friend_request.js"></script>
+    <script src="{{ STATIC_URL }}js/back_button_fix.js"></script>
+    <script src="{{ STATIC_URL }}js/removeFriend.js"></script>
+    <script>
+        var otherUser = "{{ person }}";
+        var otherUserFirstName = "{{ person.first_name|capfirst }}"
+    </script>
+    <style>
+      .bgColor {
+          background-color: #e3e3e3;
+      }
+    </style>
+    <script>removeFriend(otherUser,otherUserFirstName)</script>
+    <script>
+      $(function(){
+          $("#posts,#friends").addClass("bgColor");
+      });
+    $(window).unload(function(){
+        $("#posts,#friends").removeClass("bgColor");
+    });
+      $(function(){
+          $(".subscriptionOptsImg").click(function(){
+              $("span.unsubscribe").show();
+          });
+      });
+      $(function(){
+          $(document).mouseup(function(){
+              $("span.unsubscribe").hide();
+          });
+      });
+      $(function(){
+          $(".removeFriendImg").click(function(){
+              $("span.removeFriend").show();
+          });
+      });
+      $(function(){
+          $(document).mouseup(function(){
+              $("span.removeFriend").hide();
+          });
+      });
+    </script>
+{% endblock %}
+{% block profile_content %}
+    <div id="content_wrapper" style="position:relative;padding-bottom: 100px;">
+      <div id="userProfileTopBlock">
+          <div id="userName">Dr {{ person.first_name|capfirst }} {{ person.last_name|capfirst }}</div>
+          <div id="profileTopContent">
+              <div id="profileProfilePic">
+                  {% if person.get_profile.get_profile_picture%}
+                      <img src="{{ person.get_profile.get_profile_picture }}" alt=""/>
+                  {% else %}
+                      <img src="{{ STATIC_URL }}images/default_profile copy.png" width="150" height="150" alt=""/>
+                  {% endif %}
+              </div>
+          </div>
+
+          {% block socialLinks %}
+              {% if person.subscribed == 'subscribed' %}
+                  <div class="subscribe">Dr {{ person.first_name|capfirst }} has subscribed to you</div>
+              {% endif %}
+              {% if user.subscribed == 'not subscribed' and not person.is_friend %}
+                  <div class="subscribe">
+                    <span class="subscribe">
+                      <a class="subscribe" href="/subscribe/{{ person.id }}/">Subscribe</a>
+                    </span>
+                  </div>
+              {% endif %}
+              {% if user.subscribed == 'subscribed' %}
+                  <div class="subscribe">Subscribed to Dr {{ person.first_name|capfirst }}<br/>
+                      <img src="{{ STATIC_URL }}images/menuArrow.png" class="subscriptionOptsImg"/><br/>
+                          <span class="unsubscribe">
+                              <a class="unsubscribe" href="/unsubscribe/{{ person.id }}/">Unsubscribe</a>
+                          </span>
+                  </div>
+              {% endif %}
+              {% if person.friend_request_status == 'pending' %}
+                  <div class="requestStatus">Friend request Sent</div>
+              {% endif %}
+              {% if person.sent_friend_request_status == 'pending' %}
+                  <div class="requestAccept" id="p_{{ person.username }}">
+                      <a id="a_{{ person.username }}" class="requestAccept" href="/request-accept/{{ person.username }}/">
+                          Accept Friend request
+                      </a>
+                  </div>
+              {% endif %}
+              {% if not person.is_friend and person != user and not person.sent_friend_request_status %}
+                  {% if not person.friend_request_status %}
+                      <div class="friend-request" id="div-{{ person.username }}">
+                          <a class="friend-request" id="{{ person.username }}" href="/friend-request/{{ person.username }}/">
+                              Add as Friend</a>
+                      </div>
+                  {% endif %}
+              {% endif %}
+                  <div class="relation">{% if person.is_friend %}Friend<br/>
+                      <img class="removeFriendImg" src="{{ STATIC_URL }}images/menuArrow.png"/><br/>
+                      <span class="removeFriend">
+                          <a class="removeFriend" href="/check-friend/{{ person.id }}/">Remove</a>
+                      </span>
+                      {% endif %}
+                  </div>
+          {% endblock %}
+      </div>
+      {% block profile_navigation %}
+          <div id="profileNavigation">
+              <ul id="ul-profileNavigation" style="float:left;">
+                  <li class="profileNav"><a id="about" href="/{{ person.username }}/">PROFILE</a></li>
+                  <li class="profileNav"><a id="posts" href="/{{ person.username }}/posts/">POSTS</a></li>
+                  <li class="profileNav"><a id="friends" href="">FRIENDS</a></li>
+              </ul>
+              <div style="border-bottom:1px solid #000;margin-left:195px;height: 20px;padding-bottom: 1px;"></div>
+          </div>
+      {% endblock %}
+    {% block about %}
+      <div id="userProfileLowerBlock">
+          <div id="profileInfo">
+              <div id="education">
+                  <div class="title">EDUCATION</div>
+                  <div class="titleInfo">
+                      <p>{{ person.get_profile.qualification }}</p>
+                      <p>at {{ person.get_profile.graduation_medical_institute }}</p>
+                  </div>
+                  <div class="title">SPECIALITY {{ person.get_profile.speciality|pluralize }}</div>
+                  <div class="titleInfo">
+                      <p>{{ person.get_profile.speciality }}</p>
+                  </div>
+                  <div class="title">WORK</div>
+                  <div class="titleInfo">
+                      {% if person.get_profile.previous_job %}
+                          <p style="color:#e3e3e3;">{{ person.get_profile.previous_job }}<span>&nbsp;&nbsp;(Previous)</span></p>
+                      {% endif %}
+                      {% if person.get_profile.present_job %}
+                          <p>{{ person.get_profile.present_job }}</p>
+                      {% else %}
+                          <p>Not yet updated</p>
+                      {% endif %}
+                  </div>
+                  <div class="title">CONTACT</div>
+                  <div class="titleInfo">
+                      <p>{{ person.email }}</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+    {% endblock %}
+    </div>
+{% endblock %}
+{% block content %}{% endblock %}

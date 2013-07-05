@@ -1,0 +1,5 @@
+<form id="form_{{ post.id }}"  method="post" action="/status/comment/{{ post.id }}/">{% csrf_token %}
+    {{ form.comment.label_tag }}<br/>
+    {{ form.comment }}<br/>
+    <input id="status_input_{{ post.id }}" type="submit" value="submit"/>
+</form>

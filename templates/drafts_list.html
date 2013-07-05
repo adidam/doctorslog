@@ -1,0 +1,29 @@
+{% extends 'index.html' %}
+{% block extra_head %}
+    <style>
+    .draft_list {
+        background-color: #FFFFFF;
+        padding: 10px 10px 5px 20px;;
+    }
+
+    .draft_link  {
+        background-color: #D4D4FF;
+    }
+
+    .draft_link a,.draft_link p {
+        padding-left: 10px;
+    }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <h3>Drafts</h3>
+    <div class="draft_list">
+        {% for item in drafts.object_list %}
+            <div class="draft_link">
+            <a href="/draft-detail/{{ item.id }}/">{{ item.title }}</a>
+            <p>{{ item.date_posted }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

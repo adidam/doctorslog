@@ -1,0 +1,174 @@
+{% extends "index.html" %}
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/notifications_list.css"/>
+{% endblock %}
+{% block content %}
+    <div id="notifications_container">
+    {% if relevant_comments %}
+      {% for comment in relevant_comments %}
+          {% if comment.posted_on.type != 'status_update' %}
+              <div class="notification_box">
+                <div class="user_pic">
+                  {% if comment.posted_by.get_profile.get_profile_picture %}
+                      <img src="{{ comment.posted_by.get_profile.get_profile_picture }}" width="50" height="50"/>
+                  {% else %}
+                      <img src="{{ STATIC_URL }}images/default_profile copy.png" width="50" height="50"/>
+                  {% endif %}
+                </div>
+                <a class="comment_notification" href="/post-detail/{{ comment.posted_on.id }}/">
+                   <span class="description">Dr {{ comment.posted_by.get_full_name|capfirst }} has commented on your post</span><br/>
+                   <span class="comment">- {{ comment|truncatewords:3 }}</span><br/>
+                   <span>{{ comment.posted_on.title|capfirst|truncatewords:5 }}</span>
+                </a>
+              </div>
+          {% else %}
+              <div class="notification_box">
+                <div class="user_pic">
+                  {% if comment.posted_by.get_profile.get_profile_picture %}
+                      <img src="{{ comment.posted_by.get_profile.get_profile_picture }}" width="50" height="50"/>
+                  {% else %}
+                      <img src="{{ STATIC_URL }}images/default_profile copy.png" width="50" height="50"/>
+                  {% endif %}
+                </div>
+                <a class="comment_notification" href="/status-post-detail/{{ comment.posted_on.id }}/">
+                  <span class="description">Dr {{ comment.posted_by.get_full_name|capfirst }} has commented on your post</span><br/>
+                  <span class="comment">- {{ comment|truncatewords:3 }}</span><br/>
+                  <span>{{ comment.posted_on|truncatewords:5 }}</span>
+                </a>
+              </div>
+          {% endif %}
+      {% endfor %}
+    {% endif %}
+    {% if older_comments %}
+        {% for comment in older_comments %}
+            {% if comment.posted_on.type != 'status_update' %}
+                <div class="notification_box">
+                <div class="user_pic">
+                    {% if comment.posted_by.get_profile_picture %}
+                        <img src="{{ comment.posted_by.get_profile_picture }}" width="50" height="50"/>
+                    {% else %}
+                        <img src="{{ STATIC_URL }}images/default_profile copy.png" width="50" height="50"/>
+                    {% endif %}
+                </div>
+                <a class="comment_notification" href="/post-detail/{{ comment.posted_on.id }}/">
+                    <span class="description">Dr {{ comment.posted_by.get_full_name|capfirst }} has commented on your post</span><br/>
+                    <span class="comment">- {{ comment|truncatewords:3 }}</span><br/>
+                    <span class="post_title">{{ comment.posted_on.title|capfirst|truncatewords:5 }}</span><br/>
+                </a>
+                </div>
+            {% else %}
+                <div class="notification_box">
+                <div class="user_pic">
+                    {% if comment.posted_by.get_profile.get_profile_picture %}
+                        <img src="{{ comment.posted_by.get_profile.get_profile_picture }}" width="50" height="50"/>
+                    {% else %}
+                        <img src="{{ STATIC_URL }}images/default_profile copy.png" width="50" height="50"/>
+                    {% endif %}
+                </div>
+                <a class="comment_notification" href="/status-post-detail/{{ comment.posted_on.id }}/">
+                    <span class="description">Dr {{ comment.posted_by.get_full_name|capfirst }} has commented on your post</span><br/>
+                    <span class="comment">- {{ comment|truncatewords:3 }}</span><br/>
+                    <span>{{ comment.posted_on|truncatewords:5 }}</span>
+                </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% if relevant_posts %}
+        {% for post in relevant_posts %}
+            {% if post.type != 'status_update' %}
+                <div class="notification_box">
+                    <div class="user_pic">
+                        {% if post.posted_by.get_profile.get_profile_picture %}
+                            <img src="{{ post.posted_by.get_profile.get_profile_picture }}" height="50" width="50">
+                        {% else %}
+                            <img src="{{ STATIC_URL }}images/default_profile copy.png" height="50" width="50"/>
+                        {% endif %}
+                    </div>
+                    <a class="post_notification" href="/post-detail/{{ post.id }}/">
+                        <span class="description">
+                            Dr {{ post.posted_by.get_full_name|capfirst }} has posted a new {{ post.mark_as }}
+                            {% if post.mark_as == 'news' %} item{% endif %}
+                            </span><br/>
+                        <span class="post_title">{{ post.title|capfirst|truncatewords:5 }}</span>
+                    </a>
+                </div>
+            {% else %}
+                <div class="notification_box">
+                    <div class="user_pic">
+                        {% if post.posted_by.get_profile.get_profile_picture %}
+                            <img src="{{ post.posted_by.get_profile.get_profile_picture }}" height="50" width="50">
+                        {% else %}
+                            <img src="{{ STATIC_URL }}images/default_profile copy.png" height="50" width="50"/>
+                        {% endif %}
+                    </div>
+                    <a class="post_notification" href="/status-post-detail/{{ post.id }}/">
+                        <span class="description">Dr {{ post.posted_by.get_full_name|capfirst }} has posted
+                            </span><br/>
+                        <span class="status_post">{{ post|truncatewords:5 }}</span>
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% if newly_commented_posts %}
+        {% for post in newly_commented_posts %}
+            <div class="notification_box">
+                <div class="user_pic">
+                        {% if post.posted_by.get_profile.get_profile_picture %}
+                            <img src="{{ post.posted_by.get_profile.get_profile_picture }}" width="50" height="50"/>
+                        {% else %}
+                            <img src="{{ STATIC_URL }}images/default_profile copy.png" width="50" height="50"/>
+                        {% endif %}
+                </div>
+                {% if post.type != 'status_update' %}
+                <a class="post_notification" href="/post-detail/{{ post.id }}/">
+                    <span class="description">
+                        {{ post.num_new_comments }} new response{{ post.num_new_comments|pluralize }} for
+                        Dr {{ post.posted_by.get_full_name|capfirst }}'s post
+                    </span><br/>
+                    <span class="post_title">{{ post.title|capfirst|truncatewords:5 }}</span><br/>
+                </a>
+                 {% else %}
+                 <a class="post_notification" href="/status-post-detail/{{ post.id }}/">
+                     <span class="description">
+                        {{ post.num_new_comments }} new response{{ post.num_new_comments|pluralize }} for
+                         Dr {{ post.posted_by.get_full_name|capfirst }}'s post
+                    </span><br/>
+                     <span class="status_post">{{ post|truncatewords:5 }}</span>
+                 </a>
+                 {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if older_posts %}
+        <p>Unchecked Notifications</p>
+        {% for post in older_posts %}
+            <div class="notification_box">
+                <div class="user_pic">
+                    {% if post.posted_by.get_profile.get_profile_picture %}
+                        <img src="{{ post.posted_by.get_profile.get_profile_picture }}" width="50" height="50"/>
+                    {% else %}
+                        <img src="{{ STATIC_URL }}images/default_profile copy.png" width="50" height="50"/>
+                    {% endif %}
+                </div>
+                {% if post.type != 'status_update' %}
+                <a class="post_notification" href="/post-detail/{{ post.id }}/">
+                    <span class="description">
+                            Dr {{ post.posted_by.get_full_name|capfirst }} has posted a {{ post.mark_as }}
+                    </span><br/>
+                    <span class="post_title">{{ post.title|capfirst|truncatewords:5 }}</span>
+                </a>
+                {% else %}
+                <a class="post_notification" href="/status-post-detail/{{ post.id }}/">
+                    <span class="description">
+                        Dr {{ post.posted_by.get_full_name|capfirst }} has posted
+                    </span><br/>
+                    <span class="status_post">{{ post|truncatewords:5 }}</span>
+                </a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,65 @@
+<script>
+    $("textarea.comment").bind('focusin',function(){
+        $(this).autoResize();
+    });
+    $(function(){
+        $("textarea.comment").keydown(function(event){
+            if(event.which == 13){
+                var txt = $(this).val();
+                if(txt!='' && txt.match(/\S+/)){
+                    $(this).parents("form.comment_submit").submit();
+                    return false;
+                }
+                else{
+                    return false;
+                }
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(".comment_submit").submit(function(){
+        var form_id = $(this).attr("id");
+        var loader = $('#'+form_id).find("img.loader");
+        $(loader).show();
+        var form = $("#"+form_id);
+        var div_id = $(this).parents(".comment_items").attr("id");
+        $.post(
+                form.attr("action"),
+                form.serializeArray(),
+                function(data){
+                    if(data.is_valid){
+                        $("#"+div_id).html(data.html);
+                        $(loader).hide();
+                        form.remove();
+                    }
+                    else{
+                        $(loader).hide();
+                        alert("Invalid entry");
+                    }
+                }
+        );return false;
+    });
+</script>
+
+<script>
+    $(function(){
+        $(".cancel_com_edit").bind('click',function(){
+            var div = $(this).parents(".comment_items").attr("id");
+            var url = $(this).attr("href");
+            $("#"+div).load(url);
+            return false;
+        });
+    });
+</script>
+
+<form class="comment_submit" id="comment_form_{{ comment.posted_on.id }}"
+      method="post" action="/edit-comment/{{ comment.id }}/" style="margin: 0;padding: 0;">{% csrf_token %}
+    <label for="id_comment_{{ comment.posted_on.id }}"></label>
+    <textarea class="comment" id="id_comment_{{ comment.posted_on.id }}"
+              cols="60" rows="1" name="comment" autofocus="autofocus">{{ comment }}</textarea><br/>
+    <input style="display: none;" class="input_submit" id="input_{{ comment.posted_on.id }}" type="submit" value="submit"/>
+    <img class="loader" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
+    <a class="cancel_com_edit" href="/comment-detail/{{ comment.id }}/">cancel</a>
+</form>

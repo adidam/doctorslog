@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile_settings.css"/>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#edit-qualification").click("click",function(){
+            $("#edit-qualification").hide();
+            $("#form-fields-qualification").load("/edit-qualification/");
+            return false;
+        });
+    });
+</script>
+<div id="qualification">
+    <div class="param">Qualification</div>
+    <div class="value">{{ user.get_profile.qualification }}
+        <a class="edit" href="/edit-qualification/" id="edit-qualification">Edit</a></div>
+    <div class="form-fields" id="form-fields-qualification">
+    </div>
+</div>

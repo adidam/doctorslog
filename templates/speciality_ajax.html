@@ -1,0 +1,282 @@
+<script src="{{ STATIC_URL }}js/jquery.js"></script>
+<script src="{{ STATIC_URL }}js/jquery-ui-1.9.2.custom.js"></script>
+<script src="{{ STATIC_URL }}js/jquery.form.js"></script>
+<script src="{{ STATIC_URL }}js/edit_status.js"></script>
+<script src="{{ STATIC_URL }}js/delete_post.js"></script>
+<script>
+    $(function(){
+        $("#specialities").css({'color':'#CC3333','background-color':'#F4F4F4'});
+    });
+    /** hide/show submit button */
+    $(document).ready(function(){
+        $("input.input_submit[type='submit']").hide();
+        $("textarea").keyup(function(){
+            var id = $(this).attr("id");
+            var str = $('#'+id).val();
+            if ($("#"+id).val()!='' && str.match(/\S+/)){
+                $("#"+id).parent().children("input.input_submit[type='submit']").show().css(
+                        {'background-color':'#557FFF','border':'none','color':'#FFFFFF','padding':'',
+                            'margin-right':'50px','fontWeight':'bold'}
+                );
+            }
+            else{
+                $("#"+id).parent().children("input.input_submit[type='submit']").hide();
+            }
+        });
+    });
+
+    $(function(){
+        $("p").filter(function(){
+            return $.trim(this.innerHTML) === "&nbsp;"
+        }).remove();
+    });
+
+    /** submit comment */
+    $(function(){
+        $(".comment_submit").submit(function(){
+            var form_id = '#'+$(this).attr("id");
+            var div_id = $(form_id).parent().children(".comments_body").attr("id");
+            var form = $(form_id);
+            var comment = '#'+form.children(".comment").attr("id");
+            $.post(
+                    form.attr("action"),
+                    form.serializeArray(),
+                    function(data){
+                        if(data.is_valid){
+                            $("#"+div_id).append(data.html);
+                            $(comment).val('');
+                            $(form_id).children("input[type='submit']").hide();
+                            //update comments
+                            var num_comments_container = form.parents(".comments_container").children("a.show_list");
+                            var num_comments_container_hide = form.parents(".comments_container").children("a.hide_list");
+                            num_comments_container.html(data.num_comments+' Responses View Discussion');
+                            if(num_comments_container_hide.is(':hidden') && num_comments_container.is(':hidden')){
+                                num_comments_container_hide.html('Hide Discussion').show()
+                            }
+                        }
+                        else{
+                            alert("oops! too much or no text?")
+                        }
+
+                    }
+            );return false;
+        });
+    });
+
+    /** delete comment */
+    $(function(){
+        $(".delete_comment").click(function(){
+            var div_id = $(this).parents(".comment_items").attr("id");
+            var url = $(this).attr("href");
+            var num_comments_container_show = $(this).parents(".comments_container").children(".show_list");
+            var num_comments_container_hide = $(this).parents(".comments_container").children(".hide_list");
+            $.getJSON(
+                    url,
+                    function(data){
+                        $('#'+div_id).html('');
+                        $('#'+div_id).remove();
+                        //update number of comments
+                        if(data.num_comments == 0){
+                            num_comments_container_show.html('');
+                            num_comments_container_hide.html('');
+                        }
+                        else{
+                            num_comments_container_show.html(data.num_comments+' Responses View Discussion');
+                        }
+                    }
+            );return false;
+        });
+    });
+
+    /** edit comment */
+    $(function(){
+        $(".edit_comment").click(function(){
+            var div_id = $(this).parents(".comment_items").attr("id");
+            var url = $(this).attr("href");
+            $.getJSON(
+                    url,
+                    function(data){
+                        $("#"+div_id).html(data.html)
+                    }
+            );return false;
+        });
+    });
+
+    /** show/hide comments */
+    $(function(){
+        $("div.comments_body").hide();
+        $(".hide_list").hide();
+        $(".show_list").click(function(e){
+            var comments = $(this).parent().children().attr("id");
+            $("#"+comments).slideDown('slow');
+            var hide_list = $(this).parent().children(".hide_list");
+            hide_list.show();
+            $(this).hide();e.preventDefault();
+        });
+    });
+
+    $(function(){
+        $(".hide_list").click(function(){
+            var comments = $(this).parent().children().attr("id");
+            $("#"+comments).slideUp("slow");
+            var show_list = $(this).parent().children(".show_list");
+            show_list.show();
+            $(this).hide();
+            return false;
+        });
+    });
+
+    /** show/hide comment-delete comment-edit */
+    $(function(){
+        $(".edit_comment").hide();
+        $(".delete_comment").hide();
+        $(".comment_items").mouseover(function(){
+            $(this).find(".edit_comment,.delete_comment").show();
+        });
+        $(".comment_items").mouseout(function(){
+            $(this).find(".edit_comment,.delete_comment").hide();
+        });
+    });
+
+</script>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/home.css"/>
+<style>
+    #speciality_list li {
+        list-style-type: none;
+        display: inline;
+    }
+    #speciality_list li {
+        margin-left: 20px;
+    }
+    #selected {
+        background-color:#F5F5F5;
+        color: #009900;
+        padding: 3px 5px 3px 5px;
+        text-decoration: none;
+        font-family: sans-serif;
+        font-weight: bold;
+        border:1px solid #DCDCDC;
+    }
+    #others  {
+        background-color:#F5F5F5;
+        color: #797979;
+        padding: 3px 5px 3px 5px;
+        text-decoration: none;
+        font-family: sans-serif;
+        font-weight: bold;
+        border:1px solid #DCDCDC;
+    }
+    #selected:hover,#others:hover {
+        background-color: #FBFBFB;
+    }
+</style>
+<div>
+    <ul id="speciality_list">
+        <li><a id="selected" href="">{{ speciality }}</a></li>
+        <li><a id="others" href="/specialities/">All specialities</a></li>
+    </ul>
+</div>
+<div class="post-wrapper">
+    {% for item in user_posts.object_list %}
+        {% if item.share_with != 'share with none' %}
+            {% if  item.type != 'status_update' %}
+                <div class="post" id="post-{{ item.id }}">
+                    <p>Posted by <a href="/{{ item.posted_by.username }}/">Dr.{{ item.posted_by.get_full_name }}</a></p>
+                    {% if item.posted_by.get_profile.get_profile_picture %}
+                        <img src="{{ item.posted_by.get_profile.get_profile_picture }}" height="75" width="100"/>
+                    {% else %}
+                        <img src="{{ STATIC_URL }}images/default_profile.png" height="75" width="100"/>
+                    {% endif %}
+                    <p>Marked as: {{ item.mark_as }}</p>
+                    <p>Relevance:
+                        {% for speciality in item.relevance.all %}
+                            {{ speciality.name }},
+                        {% endfor %}
+                    </p>
+                    <p>{{ item.title }}</p>
+                    <div class="subject">
+                        {% autoescape off %}
+                            {{ item.subject }}
+                        {% endautoescape %}
+                    </div>
+                    <p class="dated">
+                        {{ item.date_posted }}
+                    </p>
+                    {% if item.posted_by == user %}
+                        <a href="/post-edit/{{ item.id }}/?next=/speciality/{{ speciality }}/" class="edit_post" id="edit-{{ item.id }}">Edit</a> |
+                        <a href="/post-delete/{{ item.id }}/" class="delete_post" id="delete-{{ item.id }}">Delete</a> |
+                        <a href="/move-to-drafts/{{ item.id }}/" class="move_to_drafts"> Move to drafts</a>
+                    {% endif %}
+                    <div class="comments_container">
+                        <div class="comments_body" id="comments_body_{{ item.id }}">
+                            {% for comment in item.comments_set.all %}
+                                <div class="comment_items" id="comment_{{ comment.id }}">
+                                    <a class="user" href="/{{ comment.posted_by.username }}/">Dr {{ comment.posted_by.get_full_name }}</a>
+                                    <p>{{ comment }}</p>
+                                    <p class="comment_date">{{ comment.date_commented }}</p>
+                                    <div class="comment_edit_delete">
+                                        {% if item.posted_by == user  or comment.posted_by == user %}
+                                            <a class="delete_comment" href="/delete_comment/{{ comment.id }}/">
+                                                <img src="{{ STATIC_URL }}images/delete.gif" title="Delete comment"/>
+                                            </a>
+                                        {% endif %}
+                                        {% if comment.posted_by == user %}
+                                            <a class="edit_comment" href="/edit-comment/{{ comment.id }}/">
+                                                <img src="{{ STATIC_URL }}images/edit.gif" title="Edit comment"/>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <a href="" id="num_comments_{{ item.id }}" class="show_list" style="float: right;">
+                            {% if item.num_comments != 0 %}{{ item.num_comments }} Responses  View Discussion{% endif %}
+                        </a>
+                        <a href="" class="hide_list" style="float:right;">
+                            Hide Discussion
+                        </a><br/>
+                        {% if item.can_be_commented %}
+                            <form class="comment_submit" id="comment_form_{{ item.id }}"  method="post" action="/comment/{{ item.id }}/">
+                                {% csrf_token %}
+                                <label for="id_comment_{{ item.id }}">your comment</label><br/>
+                                {% if user.get_profile.get_profile_picture %}
+                                    <img src="{{ user.get_profile.get_profile_picture }}" width="50" height="50"/>
+                                {% else %}
+                                    <img src="{{ STATIC_URL }}images/default_profile.png" width="50" height="50"/>
+                                {% endif %}
+                                <textarea class="comment" id="id_comment_{{ item.id }}" cols="50" rows="2" name="comment"></textarea><br/>
+                                <input class="input_submit" id="input_{{ item.id }}" type="submit" value="post comment"/><br/>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                {% include 'speciailty_wise_status_updates.html' %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>
+{% if user_posts.object_list %}
+    <div class="pagination">
+              <span class="step-links">
+              {% if user_posts.has_previous %}
+                  <a href="?page={{ user_posts.previous_page_number }}">previous</a>
+              {% endif %}
+
+                  <span class="current">
+                 Page {{ user_posts.number }} of {{ post_list.num_pages }}.
+              </span>
+
+                  {% if user_posts.has_next %}
+                      <a href="?page={{ user_posts.next_page_number }}">next</a>
+                  {% endif %}
+               </span>
+    </div>
+{% else %}
+    <div class="suggestions" style="background-color: #FFFFFF;
+            font-family: sans-serif;padding: 10px;margin-left: 20px;width:500px;color: #7F7FFF;">
+        <p>
+            No shared posts in {{ speciality }}
+        </p>
+    </div>
+{% endif %}

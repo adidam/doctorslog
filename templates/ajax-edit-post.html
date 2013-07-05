@@ -1,0 +1,78 @@
+{% extends "new_post.html" %}
+{% block extra_head %}
+    {{ form.media }}
+    <script src="{{ STATIC_URL }}js/post_save.js"></script>
+    <style>
+        ul li {
+            list-style-type: none;
+            display: inline;
+        }
+        li{
+            margin-top:-10px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        .share {
+            border: none;
+            background-color: #5555FF;
+            color: #FFFFFF;
+            margin-top: 20px;
+            padding: 3px 7px 3px 7px;
+            font-weight: bold;
+        }
+
+        .share:hover {
+            background-color: #2A2AFF;
+        }
+
+        .to_draft {
+            border: none;
+            background-color: #5555FF;
+            color: #FFFFFF;
+            margin-top: 20px;
+            padding: 3px 7px 3px 7px;
+            font-weight: bold;
+        }
+
+        .to_draft:hover {
+            background-color: #2A2AFF;
+        }
+    </style>
+{% endblock %}
+{% block edit_form %}
+    <form class="edit-post-form" id="form_{{ id }}"
+          {% if query_string %}
+          action="/post-edit/{{ id }}/?next={{ query_string }}"
+          {% else %}action="/post-edit/{{ id }}/"{% endif %}
+          method="post">{% csrf_token %}
+    {{ form.title.label_tag }}<br/>
+    {{ form.title }}<br/>
+    {{ form.subject.label_tag }}<br/>
+    {{ form.subject }}<br/>
+    {{ form.share_with.label_tag }}<br/>
+    {{ form.share_with }}<br/>
+    {% if p.friends.all %}
+        <label id="select_friends" for="id_selected_friends">Select Friends to share:</label><br/>
+        <select id="id_selected_friends" name="selected_friends" multiple="multiple" size="3">
+            {% for item in p.friends.all %}
+                <option value="{{ item.id }}" {% for friend in friends_selected %}
+                    {% if item == friend %}selected="{{ friend.id }}" {% endif %}
+                {% endfor %}>
+                    Dr {{ item.get_user.get_full_name|capfirst }}
+                </option>
+            {% endfor %}
+        </select><br/>
+    {% endif %}
+    {{ form.mark_as.label_tag }}<br/>
+    {{ form.mark_as }}<br/>
+    {{ form.relevance.label_tag }}<br/>
+    {{ form.relevance.help_text }}<br/>
+    {{ form.relevance }}<br/>
+    {{ form.errors }}
+    <input class="share" type="submit" value="share"/>
+    <input class="to_draft" type="submit" value="save"/>
+    </form>
+{% endblock %}

@@ -1,0 +1,67 @@
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/report_form.css"/>
+<script type="text/javascript"src="{{ STATIC_URL }}js/report_spam.js"></script>
+
+<!-- prevent empty form submission -->
+<script>
+    $(function(){
+        $(".report_input_submit").bind('click',function(e){
+            var text_area = $(this).parents(".report_submit_form").children("textarea");
+            var str = $(text_area).val();
+            if(str =='' || !str.match(/\S+/)){
+                alert("Enter a report/reason and submit..");
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+<script>
+    $(function(){
+        $(".report_submit_form").submit(function(){
+            var form_id = $(this).attr("id");
+            var loader = $(this).parents("#content_wrapper").find(".post-delete-loader");
+            var div = $(this).parents("#content_wrapper");
+            var form = $('#'+form_id);
+            $(loader).show();
+            $.post(
+                    form.attr('action'),
+                    form.serializeArray(),
+                    function(data){
+                        div.html(data);
+                        $(loader).hide();
+                        if(!window.location.hash){
+                            window.location.hash = 'a';
+                        }
+                    }
+
+            );return false;
+        });
+    });
+
+    $(function(){
+        $(".just_hide").click(function(){
+            var url = $(this).attr("href");
+            var loader = $(this).parents("#content_wrapper").find(".post-delete-loader");
+            $(loader).show();
+            $.getJSON(
+                    url,
+                    function(data){
+                        $("#content_wrapper").html(data.html);
+                        $(loader).hide();
+                        if(!window.location.hash){
+                            window.location.hash = 'a';
+                        }
+                    }
+            );return false;
+        });
+    });
+</script>
+<form class="report_submit_form" method="post" id="post_report_form_{{ item.id }}" action="/report-post/{{ item.id }}/">
+    {% csrf_token %}
+    <label for="id_reason">kindly let us know the reason to hide this post..</label>
+    <textarea id="id_reason" rows="2" cols="60" name="reason"></textarea><br/>
+    <ul class="report_opts">
+        <li><a href="" class="cancel_report">Cancel</a></li>
+        <li><a href="/hide-post/{{ item.id }}/" class="just_hide">I don't have any reason, just hide</a></li>
+        <li><input class="report_input_submit" type="submit" value="Submit Report"/></li>
+    </ul>
+</form><br/>

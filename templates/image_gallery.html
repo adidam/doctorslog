@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Image gallery - Dr {{ user.get_full_name }}</title>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wPaint/inc/jquery.ui.core.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wPaint/inc/jquery.ui.widget.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wPaint/inc/jquery.ui.mouse.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}wPaint/inc/jquery.ui.draggable.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wPaint/inc/wColorPicker.css" />
+    <script type="text/javascript" src="{{ STATIC_URL }}wPaint/inc/wColorPicker.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}wPaint/wPaint.css" />
+    <script type="text/javascript" src="{{ STATIC_URL }}wPaint/wPaint.js"></script>
+</head>
+<body>
+    <div id="image_wrapper">
+        {% for image in images %}
+            <img src="{{ image }}" style="width: 400px;height: 300px;"/>
+        {% endfor %}
+    </div>
+    <a class="edit-image" href="/home/">Home</a>
+</body>
+</html>

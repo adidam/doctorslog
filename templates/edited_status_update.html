@@ -1,0 +1,19 @@
+    <script src="{{ STATIC_URL }}js/edit_status.js"></script>
+    <script src="{{ STATIC_URL }}js/delete_post.js"></script>
+
+    {% if item.posted_by.get_profile.get_profile_picture %}
+        <img class="user_photo" src="{{ item.posted_by.get_profile.get_profile_picture }}" height="75" width="75" alt=""/>
+    {% else %}
+        <img class="user_photo" src="{{ STATIC_URL }}images/default_profile copy.png" height="75" width="75" alt=""/>
+    {% endif %}
+    <div class="status_post_subject">
+        <p><a class="user" href="/{{ item.posted_by.username }}/">Dr {{ item.posted_by.get_full_name|capfirst }}</a>
+            <span class="dated">{{ item.date_posted }}</span></p>
+        <p>{{ item.status_update }}</p>
+    </div>
+    {% if item.posted_by == user %}
+        <div class="status_post_nav">
+        <a href="/edit-status/{{ item.id }}/" class="edit_status_post" id="status-edit-{{ item.id }}">Edit</a> |
+        <a href="/status-post-delete/{{ item.id }}/" class="delete_post" id="status-delete-{{ item.id }}">Delete</a>
+        </div>
+    {% endif %}

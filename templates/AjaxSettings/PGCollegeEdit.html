@@ -1,0 +1,28 @@
+
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile_settings.css"/>
+<script type="text/javascript">
+    $(function(){
+        $("#edit-PGCollege").click(function(){
+            $(this).parents(".child_wrapper").addClass("bgColor");
+            $.get(
+                    $(this).attr('href'),
+                    function(data){
+                        $("#form-fields-PGCollege").html(data)
+                    }
+            );
+            return false;
+        });
+    });
+</script>
+<div id="PGCollege">
+    <div class="param">Post-graduation from</div>
+    <div class="value">
+        {% if user.get_profile.post_graduation_medical_institute %}
+            {{ user.get_profile.post_graduation_medical_institute|linebreaksbr }}
+        {% else %}
+            <span style="color:red;">Not yet updated</span>
+        {% endif %}
+        <a class="edit" href="/edit/PG-college/" id="edit-PGCollege">Edit</a></div>
+    <div class="form-fields" id="form-fields-PGCollege">
+    </div>
+</div>

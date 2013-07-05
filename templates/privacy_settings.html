@@ -1,0 +1,29 @@
+{% extends "AjaxSettings/base_settings.html" %}
+{% block extra_script %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#share-edit").click(function(){
+            $("#share-edit-form").load("/global-share-settings/");
+            return false;
+        });
+    });
+</script>
+{% endblock %}
+{% block settings_content %}
+  {% if share_with == 'share with all' %}
+      <p>POSTS: Your posts will be shared with all members</p>
+  {% endif %}
+  {% if share_with == 'share with friends' %}
+      <p>POSTS: Your posts will be shared with friends</p>
+  {% endif %}
+  {% if share_with == 'share with related friends' %}
+      <p>POSTS: Your posts will be shared with friends of related speciality</p>
+  {% endif %}
+  {% if share_with == 'share with none' %}
+      <p>POSTS: Your posts will be shared with none</p>
+  {% endif %}
+  <div id="share-edit-form">
+  <a href="/global-share-settings/" id="share-edit">Edit</a>
+  </div>
+{% endblock %}

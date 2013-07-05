@@ -1,0 +1,241 @@
+{% extends "index.html" %}
+  {% block extra_head %}
+      <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Noto+Sans"
+            xmlns="http://www.w3.org/1999/html">
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script src="{{ STATIC_URL }}js/edit_status.js"></script>
+    <script src="{{ STATIC_URL }}js/submit_button_show_hide.js"></script>
+    <script src="{{ STATIC_URL }}js/submit_comment.js"></script>
+    <script src="{{ STATIC_URL }}js/delete_comment.js"></script>
+    <script src="{{ STATIC_URL }}js/edit_comment.js"></script>
+    <script src="{{ STATIC_URL }}js/show_image.js"></script>
+    <script src="{{ STATIC_URL }}js/edit_status.js"></script>
+    <script src="{{ STATIC_URL }}js/comments_ui.js"></script>
+      <!-- prevent empty form submission -->
+      <script>
+          $(function(){
+              $(".report_input_submit").bind('click',function(e){
+                  var text_area = $(this).parents(".report_submit_form").children("textarea");
+                  var str = $(text_area).val();
+                  if(str =='' || !str.match(/\S+/)){
+                      alert("Enter a report/reason and submit..");
+                      e.preventDefault();
+                  }
+              });
+          });
+
+          $(function(){
+              $(".cancel_report").click(function(e){
+                  $(this).parents(".report_submit_form").hide();
+                  e.preventDefault();
+              });
+          });
+
+          $(function(){
+              $(".report_post_non_ajax").click(function(e){
+                 var form = $(this).parents(".post").find(".report_submit_form");
+                 form.show();
+                  e.preventDefault();
+              });
+          });
+      </script>
+    <script>
+        $(function(){
+            $("p").filter(function(){
+                return $.trim(this.innerHTML) === "&nbsp;"
+            }).remove();
+        });
+    </script>
+      <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/home1.css"/>
+      <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/report_form.css"/>
+{% endblock %}
+{% block content %}
+<div id="content_wrapper">
+<div class="post-wrapper">
+    {% if item.type != 'status_update' %}
+<div class="post" id="post-{{ item.id }}">
+    <div class="post_info">
+        {% if item.posted_by.get_profile.get_profile_picture %}
+            <img class="user_photo" src="{{ item.posted_by.get_profile.get_profile_picture }}" height="75" width="75"/>
+        {% else %}
+            <img class="user_photo" src="{{ STATIC_URL }}images/default_profile.png" height="75" width="75"/>
+        {% endif %}
+        <div class="post_info_info">
+            <p class="title">{{ item.title|capfirst }}</p>
+            <p class="publisher_info">Posted by <a class="user" href="/{{ item.posted_by.username }}/">Dr.{{ item.posted_by.get_full_name|capfirst }}</a> to
+                     <span>
+                         {% for speciality in item.relevance.all %}
+                             {{ speciality.name }},
+                         {% endfor %}
+                     </span>
+            </p>
+            <span class="dated"> on {{ item.date_posted }}</span>
+        </div>
+    </div>
+    <div class="subject">
+        {% autoescape off %}
+            {{ item.subject }}
+        {% endautoescape %}
+    </div>
+    {% if item.posted_by == user %}
+        <a href="/post-edit/{{ item.id }}/?next=/home/" class="edit_post" id="edit-{{ item.id }}">Edit</a> |
+        <a href="/post-delete/{{ item.id }}/?next=/notifications/" class="delete_post" id="delete-{{ item.id }}">Delete</a> |
+        <a href="/move-to-drafts/{{ item.id }}/?next=/notifications/" class="move_to_drafts"> Move to drafts</a>
+        {% else %}
+        <a href="/report-post/{{ item.id }}/?next=/notifications/" class="report_post_non_ajax">Hide / Report this post</a>
+    {% endif %}
+    <form class="report_submit_form" method="post" id="post_report_form_{{ item.id }}"
+          action="/report-post/{{ item.id }}/?next=/notifications/" style="display:none;">
+        {% csrf_token %}
+        <label for="id_reason">kindly let us know the reason to hide this post..</label>
+        <textarea id="id_reason" rows="2" cols="60" name="reason"></textarea><br/>
+        <ul class="report_opts">
+            <li><a href="" class="cancel_report">Cancel</a></li>
+            <li><a href="/hide-post/{{ item.id }}/?next=/notifications/" class="just_hide">I don't have any reason, just hide</a></li>
+            <li><input class="report_input_submit" type="submit" value="Submit Report"/></li>
+        </ul>
+    </form><br/>
+    <div class="comments_container">
+        <div class="comments_body" id="comments_body_{{ item.id }}">
+            {% for comment in item.comments_list %}
+                <div class="comment_items" id="comment_{{ comment.id }}">
+                  <div class="user_container">
+                      <a class="user" href="/{{ comment.posted_by.username }}/">
+                          Dr {{ comment.posted_by.get_full_name|capfirst }}</a>
+                      <span class="comment_date">{{ comment.date_commented }}</span>
+                          <a href="" class="comment_opt_link" id="comment_opt_link_{{ comment.id }}">
+                              <img class="com_set_icon" src="{{ STATIC_URL }}images/comment_settings.png"/>
+                          </a>
+                  </div>
+                    <div class="comment_opt_container">
+                        <ul class="comment_root_menu">
+                            {% if comment.posted_by != user %}
+                                <li><a class="hide_comment" href="/hide-comment/{{ comment.id }}/">Hide</a></li>
+                            {% endif %}
+                            {% if comment.posted_by == user %}
+                                <li><a class="edit_comment" href="/edit-comment/{{ comment.id }}/">Edit</a></li>
+                            {% endif %}
+                            {% if item.posted_by == user or comment.posted_by == user %}
+                                <li><a class="delete_comment" href="/delete_comment/{{ comment.id }}/">Delete</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                    <div class="comment_main" id="comment_main_{{ comment.id }}">
+                      {% if comment.posted_by.get_profile.get_profile_picture %}
+                        <img class="user_photo" src="{{ comment.posted_by.get_profile.get_profile_picture }}" height="40" width="40"/>
+                      {% else %}
+                        <img class="user_photo" src="{{ STATIC_URL }}images/default_profile.png" height="40" width="40"/>
+                      {% endif %}
+                      <div class="comment_div">
+                         <p class="comment_subject" id="comment_subject_{{ comment.id }}">{{ comment }}</p>
+                      </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% if item.can_be_commented %}
+            <form class="comment_submit" id="comment_form_{{ item.id }}"  method="post" action="/comment/{{ item.id }}/">
+                {% csrf_token %}
+                <label for="id_comment_{{ item.id }}">your comment</label><br/>
+                {% if user.get_profile.get_profile_picture %}
+                    <img src="{{ user.get_profile.get_profile_picture }}" width="40" height="40"/>
+                {% else %}
+                    <img src="{{ STATIC_URL }}images/default_profile.png" width="40" height="40"/>
+                {% endif %}
+                <textarea class="comment" id="id_comment_{{ item.id }}" cols="60" rows="2" name="comment"></textarea>
+                <input class="input_submit" id="input_{{ item.id }}" type="submit" value="post comment"/><br/>
+                <img class="loader" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
+            </form>
+        {% endif %}
+    </div>
+
+    </div>
+    {% else %}
+    <div class="post" id="status_post_{{ item.id }}">
+        <div class="status_post_container" id="status_post_container_{{ item.id }}">
+            {% if item.posted_by.get_profile.get_profile_picture %}
+                <img class="user_photo" src="{{ item.posted_by.get_profile.get_profile_picture }}" height="75" width="75" alt=""/>
+            {% else %}
+                <img class="user_photo" src="{{ STATIC_URL }}images/default_profile copy.png" height="75" width="75" alt=""/>
+            {% endif %}
+            <div class="status_post_subject">
+                <p><a class="user" href="/{{ item.posted_by.username }}/">Dr {{ item.posted_by.get_full_name|capfirst }}</a>
+                    <span class="dated">{{ item.date_posted }}</span></p>
+                <p>{{ item.status_update }}</p>
+            </div>
+            {% if item.posted_by == user %}
+                <a href="/edit-status/{{ item.id }}/" class="edit_status_post" id="status-edit-{{ item.id }}">Edit</a> |
+                <a href="/status-post-delete/{{ item.id }}/?next=/notifications/" class="delete_post" id="status-delete-{{ item.id }}">Delete</a>
+            {% else %}
+                <a href="/report-status-post/{{ item.id }}/" class="report_post_non_ajax">Hide / Report this post</a>
+            {% endif %}
+        </div>
+        <form class="report_submit_form" method="post" id="status_post_report_form_{{ item.id }}"
+              action="/report-status-post/{{ item.id }}/?next=/notifications/" style="display: none;">
+            {% csrf_token %}
+            <label for="id_reason">kindly let us know the reason to hide this post..</label>
+            <textarea id="id_reason" rows="2" cols="60" name="reason"></textarea><br/>
+            <ul class="report_opts">
+                <li><a href="" class="cancel_report">Cancel</a></li>
+                <li><a href="/hide-status-post/{{ item.id }}/?next=/notifications/"
+                       class="just_hide">I don't have any reason, just hide</a></li>
+                <li><input class="report_input_submit" type="submit" value="Submit Report"/></li>
+            </ul>
+        </form><br/>
+        <div class="comments_container">
+            <div class="comments_body" id="status_comments_body_{{ item.id }}">
+                {% for comment in item.statuscomments_set.all %}
+                    <div class="comment_items" id="status_comment_{{ comment.id }}">
+                        <div class="user_container">
+                            <a class="user" href="/{{ comment.posted_by.username }}/">Dr {{ comment.posted_by.get_full_name }}</a>
+                            <span class="comment_date">{{ comment.date_commented }}</span>
+                            {% if item.posted_by == user or comment.posted_by == user %}
+                                <a href="" class="comment_opt_link" id="comment_opt_link_{{ comment.id }}">
+                                    <img class="com_set_icon" src="{{ STATIC_URL }}images/comment_settings.png"/>
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="comment_opt_container">
+                            <ul class="comment_root_menu">
+                                {% if comment.posted_by == user %}
+                                    <li><a class="edit_comment" href="/status/edit-comment/{{ comment.id }}/">Edit</a></li>
+                                {% endif %}
+                                {% if item.posted_by == user or comment.posted_by == user %}
+                                    <li><a class="delete_comment" href="/status/delete-comment/{{ comment.id }}/">Delete</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="comment_main" id="status_comment_main_{{ comment.id }}">
+                            {% if comment.posted_by.get_profile.get_profile_picture %}
+                                <img class="user_photo" src="{{ comment.posted_by.get_profile.get_profile_picture }}" height="40" width="40"/>
+                            {% else %}
+                                <img class="user_photo" src="{{ STATIC_URL }}images/default_profile.png" height="40" width="40"/>
+                            {% endif %}
+                            <div class="comment_div">
+                                <p class="comment_subject" id="status_comment_subject_{{ comment.id }}">{{ comment }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% if item.can_be_commented %}
+                <form class="comment_submit" id="status_comment_form_{{ item.id }}"  method="post" action="/status/comment/{{ item.id }}/">
+                    {% csrf_token %}
+                    <label for="id_status_comment_{{ item.id }}">your comment</label><br/>
+                    {% if user.get_profile.get_profile_picture %}
+                        <img src="{{ user.get_profile.get_profile_picture }}" width="40" height="40"/>
+                    {% else %}
+                        <img src="{{ STATIC_URL }}images/default_profile.png" width="40" height="40"/>
+                    {% endif %}
+                    <textarea class="comment" id="id_status_comment_{{ item.id }}" cols="60" rows="2" name="comment"></textarea>
+                    <input class="input_submit" id="status_input_{{ item.id }}" type="submit" value="post comment"/><br/>
+                    <img class="loader" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

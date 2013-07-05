@@ -1,0 +1,81 @@
+{% extends "index.html" %}
+{% block extra_head %}
+    {{ form.media }}
+    <script src="{{ STATIC_URL }}js/post_save.js"></script>
+    <script src={{ STATIC_URL }}js/prevent_paste.js></script>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/new_post.css"/>
+    <script>
+        preventPaste("#id_title");
+    </script>
+    {% if error %}
+        {% autoescape off %}
+            <script>
+              alert("Select one or more friends")
+            </script>
+        {% endautoescape %}
+    {% endif %}
+    <style>
+      .title-extra-style {
+          line-height: 50px;
+      }
+    </style>
+    <script>
+      $(function(){
+          $("#new_post").css({'background-color':'#eee','color':'#CC0000'});
+          $('label[for="id_title"]').text('');
+          $('label[for="id_subject"]').text('');
+          $("#id_title").attr("placeholder",'Give a title to this post..');
+          $("#id_title").addClass("title-extra-style");
+          $("#id_title").bind('focusin keyup keydown',function(){
+              if($(this).val()!='' && $(this).val().match(/\S+/)){
+                  $(this).attr('placeholder','');
+                  $(this).removeClass("title-extra-style");
+              }
+              else{
+                  $(this).attr('placeholder','Give a title to this post..');
+                  $(this).addClass("title-extra-style");
+              }
+          });
+          $("#id_title").focusout(function(){
+              $(this).attr('placeholder','Give a title to this post..');
+              if($(this).val()!='' && !$(this).val().match(/\S+/)){
+                  $(this).val('');
+              }
+              if($(this).val()=='' && !$(this).val().match(/\S+/)){
+                  $(this).addClass("title-extra-style");
+              }
+          });
+      });
+    </script>
+{% endblock %}
+{% block content %}
+   {% block edit_form %}
+   <div>
+       <form action="/new_post/" method="post">{% csrf_token %}
+       {{ form.title.label_tag }}<br/>
+       {{ form.title }}<br/>
+       {{ form.subject.label_tag }}<br/>
+       {{ form.subject }}<br/>
+       {{ form.share_with.label_tag }}
+       {{ form.share_with }}<br/>
+       {% if p.friends.all %}
+           <label id="select_friends" for="id_selected_friends">Select Friends to share:
+               <span>Hold down "Control", or "Command" on a Mac, to select more than one.</span></label><br/>
+           <select id="id_selected_friends" multiple="multiple" name="selected_friends" size="3">
+               {% for item in p.friends.all %}
+                   <option value="{{ item.id }}">Dr {{ item.get_user.get_full_name|capfirst }}</option>
+               {% endfor %}
+           </select><br/>
+       {% endif %}
+       {{ form.mark_as.label_tag }}
+       {{ form.mark_as }}
+       {{ form.relevance.label_tag }}<br/>
+       {{ form.relevance.help_text }}<br/>
+       {{ form.relevance }}<br/>
+       {{ form.errors }}
+       <input class="share" type="submit" value="share"/>
+       <input class="to_draft" type="submit" value="save"/>
+       </form>
+   </div>
+   {% endblock %}
+{% endblock %}

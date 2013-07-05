@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<script src="{{ STATIC_URL }}js/settings_edit.js"></script>
+<script>
+    $(function(){
+        $("#medSchool_edit_form").submit(function(e){
+            submitForm($(this),"#form-fields-medSchool","#medSchool_wrapper","#edit-medSchool");
+            return false;
+        })
+    });
+</script>
+<form id="medSchool_edit_form" action="/edit-medSchool-detail/" method="post" >
+    {% csrf_token %}
+    {{ form.medical_school.help_text }}<br/>
+    {{ form.medical_school.label_tag }}<br/>
+    {{ form.medical_school }}<br/>
+    <input id="medSchoolDetail_submit" type="submit" value="submit"/>
+    <input type="submit" value="Cancel" id="cancel-medSchool-edit"/>
+    <img src="{{ STATIC_URL }}images/ajax-loader.gif" style="display: none;"/>
+</form>

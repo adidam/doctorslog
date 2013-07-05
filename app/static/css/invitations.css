@@ -1,0 +1,43 @@
+#invite {
+    width:435px;
+    margin-top: 50px;
+    padding: 20px 30px;
+    background-color: #F9F9F9;
+    border: 1px solid #eee;
+}
+
+#hints {
+    margin-top:30px;
+    font-family: 'Arial',Helvetica,serif;
+    font-size: 14px;
+    line-height: 18px;
+    color:#000;
+}
+
+input.invitation {
+    height: 30px;
+    background-color: #fff;
+    padding: 2px 4px;
+    -webkit-transition:border-color .2s linear, box-shadow .2s linear;
+    transition: border-color .2s linear,box-shadow .2s linear;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.invitation:focus {
+    border-color:#63B1FF;
+    box-shadow:  0 0 2px 3px rgba(99,175,255,0.2);
+    -webkit-box-shadow : 0 0 2px 3px rgba(99,175,255,0.2);
+}
+
+#error {
+    width: 500px;
+    margin-top: 10px;
+    padding: 10px 0;
+    background-color: #FFCF6D;
+    color: #000;
+    font-family: 'Arial',helvetica,serif;
+    font-size: 14px;
+    text-align: center;
+}

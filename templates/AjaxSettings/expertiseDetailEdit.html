@@ -1,0 +1,27 @@
+
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile_settings.css"/>
+<script type="text/javascript">
+    $(function(){
+        $("#edit-expertise").click(function(){
+            $.get(
+                    $(this).attr('href'),
+                    function(data){
+                        $("#form-fields-expertise").html(data)
+                    }
+            );
+            return false;
+        });
+    });
+</script>
+<div id="previousJob">
+    <div class="param">Expertise</div>
+    <div class="value">
+        {% if user.get_profile.expertise %}
+            {{ user.get_profile.expertise }}
+        {% else %}
+            <span style="color:red;">Not yet updated</span>
+        {% endif %}
+        <a class="edit" href="/edit/expertise/" id="edit-expertise">Edit</a></div>
+    <div class="form-fields" id="form-fields-expertise">
+    </div>
+</div>

@@ -1,0 +1,35 @@
+ul.report_opts li {
+    display: inline;
+    margin-left: 35px;
+}
+
+ul.report_opts {
+    margin: 10px 0 0 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+
+.report_input_submit,.cancel_report,.just_hide {
+    border: 1px solid #e3e3e3;
+    color: #CC0000;
+    font-size: 12px;
+    font-family: 'Noto Sans',Arial,fantasy;
+    background-color: #eeeeee;
+    cursor: pointer;
+    padding: 5px;
+}
+
+a.cancel_report,a.just_hide {
+    text-decoration: none;
+}
+
+.report_input_submit:hover,.cancel_report:hover,.just_hide:hover {
+    background-color: #F5F5F5;
+}
+
+.report_submit_form label {
+    font-family: 'Noto Sans',Helvetica,cursive;
+    font-size: 13px;
+    color: #696969;
+}

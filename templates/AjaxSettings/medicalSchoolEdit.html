@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile_settings.css"/>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#edit-medSchool").click("click",function(){
+            $("#edit-medSchool").hide();
+            $("#form-fields-medSchool").load("/edit-medSchool-detail/");
+            return false;
+        });
+    });
+</script>
+<div id="medicalSchool">
+    <div class="param">Medical School/University</div>
+    <div class="value">{{ user.get_profile.graduation_medical_institute|linebreaksbr }}
+        <a class="edit" href="/edit-medSchool-detail/" id="edit-medSchool">Edit</a></div>
+    <div class="form-fields" id="form-fields-medSchool">
+    </div>
+</div>

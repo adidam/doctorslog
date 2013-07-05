@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/invitations.css"/>
+    <style>
+    input[type="text"]:focus {
+        outline: none;
+    }
+    </style>
+    <script>
+      $(function(){
+          $("#inviteDoctors").css({'background-color':'#eee','color':'#CC0000'})
+      });
+    </script>
+{% endblock %}
+{% block content %}
+    <div id="invitations_wrapper">
+      <div id="hints">
+          <p><strong>Invite your colleagues</strong></p>
+          You can send invitations to one or more doctors you know, to join doctorslog.<br/>
+          To send multiple emails, enter comma-separated addresses.
+      </div>
+      <div id="invite">
+          <form method="post" action="/invite/">{% csrf_token %}
+              <label for="invitation"></label>
+              <input id="invitation" class="invitation" type="text" name="recipients" size="50"/>
+              <input type="submit" value="Send"/>
+          </form>
+      </div>
+        {% if error %}
+            <div id="error">{{ error }}</div>
+        {% endif %}
+    </div>
+{% endblock %}

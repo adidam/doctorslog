@@ -1,0 +1,7 @@
+{% extends "status_updates.html" %}
+{% block quick_post_opts %}
+    <div class="status_post_nav">
+        <a href="/edit-status/{{ item.id }}/?next=/{{ user.username }}/" class="edit_status_post" id="status-edit-{{ item.id }}">Edit</a> |
+        <a href="/status-post-delete/{{ item.id }}/?next=/{{ user.username }}/" class="delete_post" id="status-delete-{{ item.id }}">Delete</a>
+    </div>
+{% endblock %}

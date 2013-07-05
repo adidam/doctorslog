@@ -1,0 +1,79 @@
+{% extends 'index.html' %}
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/home.css"/>
+    <script src="{{ STATIC_URL }}js/delete_comment.js"></script>
+    <script src="{{ STATIC_URL }}js/show_hide_comments.js"></script>
+    <script>
+        /** show/hide comment-delete */
+        $(function(){
+            $(".delete_comment").hide();
+            $(".comment_items").mouseover(function(){
+                $(this).find(".delete_comment").show();
+            });
+            $(".comment_items").mouseout(function(){
+                $(this).find(".delete_comment").hide();
+            });
+        });
+
+        $(function(){
+            $("p").filter(function(){
+                return $.trim(this.innerHTML) === "&nbsp;"
+            }).remove();
+        });
+    </script>
+{% endblock %}
+{% block content %}
+<div class="post-wrapper">
+<div class="post" id="post-{{ item.id }}">
+    <p>Posted by <a href="/{{ item.posted_by.username }}/">Dr.{{ item.posted_by.get_full_name }}</a></p>
+    {% if item.posted_by.get_profile.get_profile_picture %}
+        <img src="{{ item.posted_by.get_profile.get_profile_picture }}" height="75" width="100"/>
+    {% else %}
+        <img src="{{ STATIC_URL }}images/default_profile.png" height="75" width="100"/>
+    {% endif %}
+    <p>Marked as: {{ item.mark_as }}</p>
+    <p>Relevance:
+        {% for speciality in item.relevance.all %}
+            {{ speciality.name }},
+        {% endfor %}
+    </p>
+    <p>{{ item.title }}</p>
+    <div class="subject">
+        {% autoescape off %}
+            {{ item.subject }}
+        {% endautoescape %}
+    </div>
+    <p class="dated">
+        {{ item.date_posted }}
+    </p>
+    {% if item.posted_by == user %}
+        <a href="/post-edit/{{ item.id }}/" class="edit_post" id="edit-{{ item.id }}">Edit</a>
+        <a href="/post-delete/{{ item.id }}/" class="delete_post" id="delete-{{ item.id }}">Delete</a>
+    {% endif %}
+    <div class="comments_container">
+        <div class="comments_body" id="comments_body_{{ item.id }}">
+            {% for comment in item.comments_set.all %}
+                <div class="comment_items" id="comment_{{ comment.id }}">
+                    <a class="user" href="/{{ comment.posted_by.username }}/">Dr {{ comment.posted_by.get_full_name }}</a>
+                    <p>{{ comment }}</p>
+                    <p class="comment_date">{{ comment.date_commented }}</p>
+                    <div class="comment_edit_delete">
+                        {% if item.posted_by == user  or comment.posted_by == user %}
+                            <a class="delete_comment" href="/delete_comment/{{ comment.id }}/">
+                                <img src="{{ STATIC_URL }}images/delete.gif" title="Delete comment"/>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <a href="" id="num_comments_{{ item.id }}" class="show_list" style="float: right;">
+            {% if item.num_comments != 0 %}{{ item.num_comments }} Responses  View Discussion{% endif %}
+        </a>
+        <a href="" class="hide_list" style="float:right;">
+            Hide Discussion
+        </a><br/>
+    </div>
+</div>
+</div>
+{% endblock %}

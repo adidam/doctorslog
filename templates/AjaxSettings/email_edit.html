@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile_settings.css"/>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#edit-3").click("click",function(){
+            $("#edit-3").hide();
+            $("#form-fields-email").load("/edit_email/");
+            return false;
+        });
+    });
+</script>
+<div id="email">
+        <div class="param">Email</div>
+        <div class="value">{{ email }}
+        <a class="edit" href="/edit_email/" id="edit-3">Edit</a></div>
+    <div class="form-fields" id="form-fields-email">
+    </div>
+</div>

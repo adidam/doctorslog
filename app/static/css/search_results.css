@@ -1,0 +1,40 @@
+.userContainer {
+    min-width: 200px;
+    min-height:250px;
+    border: 1px solid #eee;
+    border-top-width: 3px;
+    float:left;
+    margin-right: 15px;
+    text-align: center;
+    padding: 5px;
+    text-align: center;
+    font-family: 'Noto Sans',Helvetica,serif;
+    font-size: 14px;
+    background-color: #F9F9F9;
+}
+
+.userName > a {
+    text-decoration: none;
+    color:#000;
+}
+
+.userName:hover {
+    text-decoration: underline;
+}
+
+#search_container {
+    width: 450px;
+    background-color: #eee;
+    border: 1px solid #e3e3e3;
+    padding:5px 20px;
+    margin-bottom: 25px;
+}
+
+.hint {
+    width:550px;
+    font-size: 14px;
+    font-family: Helvetica,serif;
+    color: #000;
+    line-height: 20px;
+    margin-bottom: 10px;
+}

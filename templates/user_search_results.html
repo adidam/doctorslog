@@ -1,0 +1,129 @@
+{% extends "index.html" %}
+{% block extra_head %}
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/search_results.css"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile.css"/>
+    <script src="{{ STATIC_URL }}js/subscriptions.js"></script>
+    <script src="{{ STATIC_URL }}js/friend_request.js"></script>
+    <script src="{{ STATIC_URL }}js/back_button_fix.js"></script>
+    <script src="{{ STATIC_URL }}js/removeFriend.js"></script>
+    <script>
+        $(function(){
+            $(".subscriptionOptsImg").click(function(){
+                var link = $(this).parents(".subscribe").find("span.unsubscribe");
+                link.show();
+            });
+        });
+        $(function(){
+            $(document).mouseup(function(){
+                $("span.unsubscribe").hide();
+            });
+        });
+        $(function(){
+            $(".removeFriendImg").click(function(){
+               var link = $(this).parents(".relation").find("span.removeFriend");
+               link.show();
+            });
+        });
+        $(function(){
+            $(document).mouseup(function(){
+                $("span.removeFriend").hide();
+            });
+        });
+    </script>
+    <script>
+        $(function(){
+            $("#search").load(
+                    '/user_search/'
+            );return false;
+        });
+    </script>
+{% endblock %}
+{% block content %}
+    <div id="search_container">
+        <div id="search"></div>
+    </div>
+    <div id="searchResults">
+    {% if search_results %}
+      {% for person in search_results %}
+          <script>
+              var otherUser = "{{ person }}";
+              var otherUserFirstName = "{{ person.first_name|capfirst }}";
+          </script>
+          <div class="userContainer"
+               {% if person.is_friend %}style="border-top: 3px solid #00CC00;" {% endif %}
+               {% if person.subscribed_by == 'subscribed' %}style="border-top: 3px solid #0000FF;"{% endif %}>
+              <div class="userName">
+                  <a href="/{{ person.username }}/" title="view profile">Dr {{ person.first_name|capfirst }} {{ person.last_name|capfirst }}</a>
+              </div>
+              {% if person.get_profile.get_profile_picture %}
+                  <a href="/{{ person.username }}/"><img src="{{ person.get_profile.get_profile_picture }}" title="view profile"/></a>
+              {% else %}
+                  <a href="/{{ person.username }}/"><img src="{{ STATIC_URL }}images/default_profile copy.png" height="150" width="150" title="view profile"/></a>
+              {% endif %}
+              {% if person.subscribed == 'subscribed' %}
+                  <div class="subscribe">Subscribed to you</div>
+              {% endif %}
+              {% if person.subscribed_by == 'not subscribed' and not person.is_friend %}
+                  <div class="subscribe">
+                    <span class="subscribe">
+                      <a class="subscribe" href="/subscribe/{{ person.id }}/">Subscribe</a>
+                    </span>
+                  </div>
+              {% endif %}
+              {% if person.subscribed_by == 'subscribed' %}
+                  <div class="subscribe">Subscribed to Dr {{ person.first_name|capfirst }}<br/>
+                      <img src="{{ STATIC_URL }}images/menuArrow.png" class="subscriptionOptsImg"/><br/>
+                          <span class="unsubscribe">
+                              <a class="unsubscribe" href="/unsubscribe/{{ person.id }}/">Unsubscribe</a>
+                          </span>
+                  </div>
+              {% endif %}
+              {% if person.friend_request_status == 'pending' %}
+                  <div class="requestStatus">Friend request Sent</div>
+              {% endif %}
+              {% if person.sent_friend_request_status == 'pending' %}
+                  <div class="requestAccept" id="p_{{ person.username }}">
+                      <a id="a_{{ person.username }}" class="requestAccept" href="/request-accept/{{ person.username }}/">
+                          Accept Friend request
+                      </a>
+                  </div>
+              {% endif %}
+              {% if not person.is_friend and person != user and not person.sent_friend_request_status %}
+                  {% if not person.friend_request_status %}
+                      <div class="friend-request" id="div-{{ person.username }}">
+                          <a class="friend-request" id="{{ person.username }}" href="/friend-request/{{ person.username }}/">
+                              Add as Friend</a>
+                      </div>
+                  {% endif %}
+              {% endif %}
+              <div class="relation">{% if person.is_friend %}Friend<br/>
+                  <img class="removeFriendImg" src="{{ STATIC_URL }}images/menuArrow.png"/><br/>
+                  <script>removeFriend(otherUser,otherUserFirstName)</script>
+                  <span class="removeFriend">
+                          <a class="removeFriend" href="/check-friend/{{ person.id }}/">Remove</a>
+                      </span>
+              {% endif %}
+              </div>
+          </div>
+      {% endfor %}
+    {% else %}
+        <div class="hint">Dear Doctor,</div>
+        <div class="hint">
+            Apologies, your search has not returned any results,please try again.
+        </div>
+        <div class="hint" style="font-weight: bold;">
+            How the search works
+        </div>
+        <div class="hint" style="margin-left: 20px;">
+            The search preferentially looks for Username which is unique for every member,
+            followed by first name and last name in that order.
+            If you do not find a search match it is possible that your requested user,
+            might not have been registered with this site yet.
+        </div>
+        <div class="hint" style="font-weight: bold;">Send Invitation</div>
+        <div class="hint" style="margin-left: 20px;">
+            You can invite Doctors you know to doctorslog<br/>
+            <a href="/invite/" style="color:#0000FF;">Send Invitation</a></div>
+    {% endif %}
+    </div>
+{% endblock %}

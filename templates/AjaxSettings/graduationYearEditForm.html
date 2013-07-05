@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<script src="{{ STATIC_URL }}js/settings_edit.js"></script>
+<script>
+    $(function(){
+        $("#graduation_edit_form").submit(function(){
+            submitForm($(this),'#form-fields-graduationYear','#graduation_year_wrapper','#edit-graduationYear');
+            return false;
+        });
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $("#cancelGraduationYear").click(function(){
+            //var wrapper = $(this).parents(".child_wrapper");
+            $("#graduationYear_wrapper").load("/ajax_settings #graduation_year_wrapper/");
+            $("#form-fields-graduationYear").empty();
+            $("#edit-graduationYear").show();
+            //wrapper.removeClass("bgColor");
+            return false;
+        });
+    });
+</script>
+
+<form id="graduation_edit_form" action="/edit-graduation-year/" method="post">
+    {% csrf_token %}
+    {{ form.graduation_year.label_tag }}<br/>
+    {{ form.graduation_year }}<br/>
+    <input id="graduationYear_submit" type="submit" value="Update"/>
+    <input type="button" value="Cancel" id="cancelGraduationYear"/>
+    <img src="{{ STATIC_URL }}images/ajax-loader.gif" style="display: none;"/>
+</form>

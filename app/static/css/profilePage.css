@@ -1,0 +1,66 @@
+#profile {
+    width:500px;
+    min-height: 250px;
+    background-color: #F9F9F9;
+    border:1px solid #eee;
+    padding: 10px;
+}
+
+#profilePageLt {
+    width:200px;
+    min-height: 250px;
+    float:left;
+}
+
+#profilePageRt {
+    width:290px;
+    min-height: 250px;
+    margin-left: 200px;
+    padding: 10px;
+}
+
+#profilePageLt > img {
+    margin-bottom: 20px;
+}
+
+a.subscribe,a.friend-request {
+    display: block;
+    text-decoration: none;
+    font-family: 'Noto Sans',Helvetica,serif;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+a.friend-request {
+    width:140px;
+    padding:7px 0 7px 20px;
+    background-color: #eee;
+    color:#00D800;
+    border: 1px solid #e3e3e3;
+    font-weight:bold;
+}
+
+a.friend-request:hover {
+    background-color: #00D800;
+    color:#fff;
+}
+
+.profileParam {
+    font-family: 'Noto Sans',Helvetica,serif;
+    font-size: 14px;
+    color:#8A8A8A;
+}
+
+.profileInfo {
+    margin-left: 20px;
+    font-family: 'Noto Sans',Helvetica,serif;
+    font-size: 13px;
+    color: #B4B4B4;
+}
+
+.userName {
+    font-family: 'Alegreya SC',Helvetica,serif;
+    color: #CC0000;
+    display: block;
+    margin-left: 5px;
+}

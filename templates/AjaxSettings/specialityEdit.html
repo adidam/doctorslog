@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile_settings.css"/>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#edit-speciality").click("click",function(){
+            $("#edit-speciality").hide();
+            $("#form-fields-speciality").load("/edit-speciality/");
+            return false;
+        });
+    });
+</script>
+<div id="qualification">
+    <div class="param">Speciality</div>
+    <div class="value">{{ user.get_profile.speciality }}
+        <a class="edit" href="/edit-speciality/" id="edit-speciality">Edit</a></div>
+    <div class="form-fields" id="form-fields-speciality">
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Sign up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ STATIC_URL }}bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Noto+Sans|Alegreya+SC"
+          xmlns="http://www.w3.org/1999/html">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/sign_up.css"/>
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script src="{{ STATIC_URL }}js/sign_up/sign_up_suggestions.js"></script>
+    <script src="{{ STATIC_URL }}js/sign_up/sign_up_validation.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            $("#id_first_year_of_graduation").attr('maxlength',4);
+            $("#id_first_year_of_post_graduation").attr("maxlength",4);
+            $("#id_first_year_of_super_speciality").attr('maxlength',4);
+            $("<div class='academicDetails'>Your academic details,Thanks for your patience</div>").insertAfter("#id_country");
+            $("#id_country option[value='IN']").attr('selected','selected');
+            $("#id_medical_institute").attr('placeholder','Graduated from..');
+            $("#id_first_year_of_graduation").attr('placeholder','YYYY');
+            $("#id_post_graduation_from").attr('placeholder','Medical Institute(optional field)');
+            $("#id_first_year_of_post_graduation").attr('placeholder','YYYY(optional field)');
+            $("#id_super_speciality_from").attr('placeholder','Medical Institute(Optional field)');
+            $("#id_first_year_of_super_speciality").attr('placeholder','YYYY(Optional field)');
+        });
+    </script>
+</head>
+<body>
+<div id="header"></div>
+<div id="wrapper">
+    <div id="about" style="position: relative;">
+    </div>
+      <form id="sign_up_form" action="." method="post">{% csrf_token %}
+        <div id="sign_up">Sign up</div>
+        <ul>
+        {{ form.as_ul }}
+        </ul>
+      <input class="btn btn-primary" id="submit-form" type="submit" value="Submit"/>
+      </form>
+      <div id="footer"></div>
+</div>
+</body>
+</html>

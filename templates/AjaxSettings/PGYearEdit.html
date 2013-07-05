@@ -1,0 +1,28 @@
+
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profile_settings.css"/>
+<script type="text/javascript">
+    $(function(){
+        $("#edit-PGYear").click(function(){
+            $(this).parents(".child_wrapper").addClass("bgColor");
+            $.get(
+                    $(this).attr('href'),
+                    function(data){
+                        $("#form-fields-PGYear").html(data)
+                    }
+            );
+            return false;
+        });
+    });
+</script>
+<div id="PGYear">
+    <div class="param">Post-graduation First Year</div>
+    <div class="value">
+        {% if user.get_profile.post_graduation_first_year %}
+            {{ user.get_profile.post_graduation_first_year }}
+        {% else %}
+            <span style="color:red;">Not yet updated</span>
+        {% endif %}
+        <a class="edit" href="/edit/PG-year/" id="edit-PGYear">Edit</a></div>
+    <div class="form-fields" id="form-fields-PGYear">
+    </div>
+</div>

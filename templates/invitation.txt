@@ -1,0 +1,10 @@
+Hello, You have been invited by Dr {{ doctor }} to join doctorslog.
+Please click on the link below to sign up.
+Note that the link expires after one successful registration.
+Our sincere apologies if you don't intend to receive this message,
+kindly ignore in that case.\n
+
+link:  www.doctorslog.net/sign-up/{{ link }}/
+
+support team
+doctorslog

@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/friend_list.css"/>
+    <script src="{{ STATIC_URL }}js/removeFriend.js"></script>
+    <script>
+      $(function(){
+          $("#allFriends").css({'background-color':'#eee','color':'#CC0000'});
+      });
+      $(function(){
+          $("#search").load(
+                  '/user_search/'
+          );return false;
+      });
+
+      $(function(){
+          $(".removeFriendImg").click(function(){
+              $("span.removeFriend").show();
+          });
+      });
+      $(function(){
+          $(document).mouseup(function(){
+              $("span.removeFriend").hide();
+          });
+      });
+    </script>
+{% endblock %}
+{% block content %}
+    <div id="search_container">
+        <div id="search"></div>
+    </div>
+    <div class="friendsWrapper">
+    {% if friends_list %}
+      {% for person in friends_list %}
+          <script>
+              var otherUser = "{{ person }}";
+              var otherUserFirstName = "{{ person.first_name|capfirst }}";
+          </script>
+          <div class="userContainer">
+              <div class="userName"><a href="/{{ person.username }}/">Dr {{ person.first_name|capfirst }} {{ person.last_name|capfirst }}</a></div>
+              {% if person.get_profile.get_profile_picture %}
+                  <a href="/{{ person.username }}/"><img src="{{ person.get_profile.get_profile_picture }}" title="view profile"/></a>
+              {% else %}
+                  <a href="/{{ person.username }}/"><img src="{{ STATIC_URL }}images/default_profile copy.png" height="150" width="150" title="view profile"/></a>
+              {% endif %}
+              <div class="relation">
+                  <img class="removeFriendImg" src="{{ STATIC_URL }}images/menuArrow.png"/><br/>
+                  <script>removeFriend(otherUser,otherUserFirstName)</script>
+                  <span class="removeFriend">
+                        <a class="removeFriend" href="/check-friend/{{ person.id }}/">Remove</a>
+                  </span>
+              </div>
+          </div>
+      {% endfor %}
+    {% else %}
+        <div class="hint">Dear Doctor, You have not included anyone in your friends list.</div>
+        <div class="hint">Please look for other members you might know in the search box and add them in your group.</div>
+        <div class="hint" style="font-weight: bold;">Send Invitation</div>
+        <div class="hint" style="margin-left: 20px;">
+            You can invite Doctors you know to doctorslog<br/>
+            <a href="/invite/" style="color:#0000FF">Send Invitation</a></div>
+    {% endif %}
+    </div>
+{% endblock %}

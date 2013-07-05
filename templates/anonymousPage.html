@@ -1,0 +1,52 @@
+{% extends "registration/login.html" %}
+{% block extra_style %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/profilePage.css"/>
+{% endblock %}
+{% block variable_content %}
+    <p id="about_heading"><span id="doctorslog">doctorslog</span>
+        is designed exclusively for doctors in medical practice and research</p>
+    <div id="profile">
+        {% if guess %}
+           <div class="userName"><span style="color:#696969;
+        font-family: Helvetica,serif;font-size: 13px;">Are you looking for&nbsp;</span>Dr {{ person.get_full_name|upper }}</div>
+        {% else %}
+            <div class="userName">Dr {{ person.get_full_name|upper }}</div>
+        {% endif %}
+        <div id="profilePageLt">
+            {% if person.get_profile.get_profile_picture %}
+                <img src="{{ person.get_profile.get_profile_picture }}" alt=""/>
+            {% else %}
+                <img src="{{ STATIC_URL }}images/default_profile copy.png" alt="" height="150" width="150"/>
+            {% endif %}
+        </div>
+        <div id="profilePageRt">
+            <div class="profileParam">Qualification <br/><span class="profileInfo">
+              {{ person.get_profile.qualification }}
+           </span></div>
+            <div class="profileParam">Medical School <br/><span class="profileInfo">
+               {{ person.get_profile.medical_school }}
+           </span></div>
+            <div class="profileParam">Subscribed to <br/><span class="profileInfo">
+               {{ person.get_profile.speciality }}
+           </span></div>
+            <div class="profileParam">Friends {{ person.num_friends }}</div>
+        </div>
+    </div>
+{% endblock %}
+{% block sign_in %}
+    <div id="login_form">
+        <p class="login">Doctor Sign in</p>
+        <form id="sign_in_form" method="post" action="/login/">
+            {% csrf_token %}
+            <p><label for="id_username">Username</label><br/>
+                <input id="id_username" type="text" maxlength="30" name="username" size="40" style="height:25px;border:1px solid #B3C3FF"></p>
+            <p><label for="id_password">Password</label><br/>
+                <input id="id_password" type="password" name="password" size="40" style="height:25px;border:1px solid #B3C3FF"></p>
+            {% if form.errors %}
+                <p id="error">Invalid username or password</p>
+            {% endif %}
+            <input class="sign_in" type="submit" value="Sign in" />
+            <input type="hidden" name="next" value="{% firstof next '/home/' %}"/>
+        </form>
+    </div>
+{% endblock %}

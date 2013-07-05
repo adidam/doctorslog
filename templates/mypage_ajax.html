@@ -1,0 +1,9 @@
+{% extends "home_content_ajax.html" %}
+{% block post_opts %}
+    <a href="/post-edit/{{ item.id }}/?next=/{{ user.username }}/" class="edit_post" id="edit-{{ item.id }}">Edit</a> |
+    <a href="/post-delete/{{ item.id }}/?next=/{{ user.username }}/" class="delete_post" id="delete-{{ item.id }}">Delete</a> |
+    <a href="/move-to-drafts/{{ item.id }}/?next=/{{ user.username }}/" class="move_to_drafts"> Move to drafts</a>
+{% endblock %}
+{% block quick_posts %}
+    {% include "status_updates_mypage.html" %}
+{% endblock %}

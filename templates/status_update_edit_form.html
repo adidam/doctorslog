@@ -1,0 +1,57 @@
+<script type="text/javascript">
+    $(function(){
+        $(".status_edit_form").submit(function(){
+            var form_id = '#'+$(this).attr("id");
+            var div = $(this).parents(".status_post_container").attr("id");
+            var form = $(form_id);
+            $(this).children(".input_submit").hide();
+            $(form_id).children("img.status_loader").show();
+            $.post(
+                    form.attr("action"),
+                    form.serializeArray(),
+                    function(data){
+                        if(data.is_valid){
+                            $('#'+div).html(data.html);
+                            form.remove();
+                            $(form_id).children("img.status_loader").hide();
+                        }
+                        else{
+                            $('#'+div).html(data.html);
+                            $(this).children(".input_submit").show();
+                        }
+                    }
+            );return false;
+        });
+    });
+</script>
+<script>
+    $(function(){
+       $("input.input_submit").bind('click',function(e){
+          var str = $(this).parent().children("textarea").val();
+           if(str == '' || !str.match(/\S+/)){
+               alert('Type some text and submit..');
+               e.preventDefault();
+           }
+       });
+    });
+</script>
+<script>
+    $(function(){
+        $(".cancel_status_post_edit").bind('click',function(){
+            var url = $(this).attr("href");
+            var div = $(this).parents(".status_post_container").attr("id");
+            $("#"+div).load(url);
+            return false;
+        });
+    });
+</script>
+
+<form action="/edit-status/{{ item.id }}/" class="status_edit_form" id="edit_status_{{ item.id }}" method="post">
+    {% csrf_token %}
+    <label for="id_status_update"></label>
+    {{ form.status_update }}
+    <input class="input_submit" type="submit" value="update" style="margin: 5px 0 0 0;float: right;"/>
+    <img class="status_loader" src="{{ STATIC_URL }}images/ajax-loader.gif"
+            style="float: right;margin-top:5px;margin-right:10px;display: none;  "/>
+    <a class="cancel_status_post_edit" href="/status/post-detail/{{ item.id }}/">Cancel</a>
+</form>

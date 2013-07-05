@@ -1,0 +1,54 @@
+{% extends 'index.html' %}
+{% block extra_head %}
+    <script>
+      $(function(){
+          $("#specialities").css({'color':'#CC3333','background-color':'#F4F4F4'});
+          $("#content").css('background-color','#FFFFFF');
+      });
+    </script>
+    <style>
+      #user_sp li,#other_sp li {
+          list-style: none;
+          display: block;
+          margin-bottom: 20px;
+      }
+
+      #user_sp a {
+          background-color:#F5F5F5;
+          color: #009900;
+          padding: 3px 5px 3px 5px;
+          text-decoration: none;
+          font-family: sans-serif;
+          font-weight: bold;
+          border:1px solid #DCDCDC;
+      }
+
+      #other_sp a {
+          background-color:#F5F5F5;
+          color: #797979;
+          padding: 3px 5px 3px 5px;
+          text-decoration: none;
+          font-family: sans-serif;
+          font-weight: bold;
+          border:1px solid #DCDCDC;
+      }
+
+      #user_sp a:hover,#other_sp a:hover{
+          background-color: #FBFBFB;
+      }
+    </style>
+{% endblock %}
+{% block content %}
+    <div id="speciality_list">
+      <ul id="user_sp">
+      {% for item in user_categories %}
+          <li><a href="/speciality/{{ item }}/">{{ item }}</a></li>
+      {% endfor %}
+      </ul>
+      <ul id="other_sp">
+      {% for item in speciality_list %}
+          <li><a href="/speciality/{{ item }}/">{{ item.name }}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+{% endblock %}

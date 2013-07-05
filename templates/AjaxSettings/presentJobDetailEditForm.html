@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<script src="{{ STATIC_URL }}js/settings_edit.js"></script>
+<script>
+    $(function(){
+        $("#presentJob_edit_form").submit(
+            function(){
+                submitForm($(this),'#form-fields-presentJob','#presentJob_wrapper','#edit-presentJob');
+                return false;
+            }
+        )
+    });
+</script>
+<script>
+    $(document).ready(function(){
+        $("#cancel-presentJob").click("click",function(){
+            $("#presentJob_wrapper").load("/ajax_settings #presentJob_wrapper/");
+            $("#form-fields-presentJob").empty();
+            $("#edit-presentJob").show();
+            return false;
+        });
+    });
+</script>
+
+<form id="presentJob_edit_form" action="/edit/present-job/" method="post" >
+    {% csrf_token %}
+    {{ form.present_job.help_text }}<br/>
+    {{ form.present_job.label_tag }}<br/>
+    {{ form.present_job }}<br/>
+    <input id="presentJob_submit" type="submit" value="submit"/>
+    <input type="submit" value="Cancel" id="cancel-presentJob"/>
+    <img style="display: none;" src="{{ STATIC_URL }}images/ajax-loader.gif"/>
+</form>

@@ -1,0 +1,140 @@
+#userProfileTopBlock {
+    margin: 0 0 5px 0;
+    width:100%;
+    padding: 10px 0;
+    background: #e5e5e5; /* Old browsers */
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: -moz-linear-gradient(top,  #e5e5e5 0%, #ffffff 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5e5e5), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #e5e5e5 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #e5e5e5 0%,#ffffff 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #e5e5e5 0%,#ffffff 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #e5e5e5 0%,#ffffff 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#ffffff',GradientType=0 ); /* IE6-8 */
+
+}
+
+#profileTopContent {
+    margin: 0 auto;
+    text-align: center;
+}
+
+#profileProfilePic > img {
+    padding: 4px;
+    background-color: #fff;
+    box-shadow: 5px 5px 7px #888;
+    -moz-box-shadow: 5px 5px 7px #888;
+    -webkit-box-shadow: 5px 5px 7px #888;
+    margin-bottom: 10px;
+}
+
+#userName {
+    text-align: center;
+    font-family: 'Noto Sans',Helvetica,serif;
+    font-size: 14px;
+    color:#000;
+    margin-top: 10px;
+}
+
+div.subscribe,div.friend-request,div.requestStatus,div.requestAccept {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 14px;
+    font-family: Helvetica,serif;
+}
+
+a.subscribe,a.friend-request,a.requestAccept {
+    text-decoration: none;
+    font-family: Arial,Verdana,serif;
+    font-weight: bold;
+    font-size: 14px;
+    color:#007FFF;
+}
+
+div.relation {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: "Lucida Sans Unicode",Arial,Verdana,serif;
+    color: #00CC00;
+}
+
+#ul-profileNavigation {
+    margin: 0;
+    padding: 0;
+    list-style-type: none
+}
+
+li.profileNav {
+    display: inline;
+}
+
+li.profileNav:hover {
+
+}
+
+li.profileNav:last-child {
+    margin-left: -4px;
+}
+
+li.profileNav:first-child {
+    margin-right: -4px;
+}
+
+.profileNav > a{
+    font-family: 'Noto Sans',Helvetica,serif;
+    font-size: 12px;
+    text-decoration: none;
+    color:#000;
+    padding: 3px 10px;
+    border-right: 1px solid #A9A9A9;
+    border-top: 1px solid #A9A9A9;
+}
+
+.profileNav > a:hover {
+    background-color: #fff;
+}
+
+#profileInfo {
+    margin-left: 60px;
+    margin-top: 30px;
+}
+
+.title {
+    font-family: 'Noto Sans',Helvetica,serif;
+    font-size: 14px;
+    border-bottom: 1px solid #e3e3e3;
+    padding-left: 5px;
+    color:#000;
+}
+
+.titleInfo {
+    margin-left:25px;
+    font-size:14px;
+    font-family: 'Noto Sans',Helvetica,serif;
+    color:#000;
+}
+
+span.unsubscribe,span.removeFriend {
+    display: none;
+}
+
+img.subscriptionOptsImg,img.removeFriendImg {
+    cursor: pointer;
+}
+
+a.unsubscribe,a.removeFriend {
+    text-decoration: none;
+    font-family: 'Lucida Grande',Arial,Verdana,serif;
+    font-size: 14px;
+    color:#8B8B8B;
+}
+
+a.unsubscribe:hover,a.removeFriend:hover {
+    text-decoration: underline;
+}
+
+a.subscribe:active,a.removeFriend:active {
+    color:#ff0000;
+}
+
